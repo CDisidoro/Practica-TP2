@@ -4,7 +4,7 @@ import java.util.List;
 
 public class NewtonUniversalGravitation implements ForceLaws{
 	
-	private double k;
+	protected double k;
 	public NewtonUniversalGravitation(double k) {
 		this.k = k;
 	}

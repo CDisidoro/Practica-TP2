@@ -5,8 +5,8 @@ import simulator.misc.Vector2D;
 
 public class MovingTowardsFixedPoint implements ForceLaws{
 	
-	private Vector2D vector;
-	private double k;
+	protected Vector2D vector;
+	protected double k;
 	public MovingTowardsFixedPoint (Vector2D vector, double k) {
 		this.vector = vector;
 		this.k = k;

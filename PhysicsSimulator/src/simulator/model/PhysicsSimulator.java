@@ -3,16 +3,16 @@ package simulator.model;
 import org.json.JSONObject;
 
 public class PhysicsSimulator {
-	private ForceLaws law;
-	private double k;
-	private Body bod;
-	public PhysicsSimulator(ForceLaws law, double k) {
+	protected ForceLaws law;
+	protected double timePerStep;
+	protected List<Body> bod;
+	public PhysicsSimulator(ForceLaws law, double timePerStep) {
 		this.law = law;
-		this.k = k;
+		this.timePerStep = timePerStep;
 		//Hay que hacer algo con Body?
 	}
 	
-	public void addBody(Body bod) {
+	public void addBody(Body newBody) {
 		//Pendiente de Programar
 	}
 	

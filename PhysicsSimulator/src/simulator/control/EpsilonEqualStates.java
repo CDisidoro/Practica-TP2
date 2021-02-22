@@ -3,10 +3,10 @@ package simulator.control;
 import org.json.JSONObject;
 
 public class EpsilonEqualStates implements StateComparator{
-	private double epsilon;
+	protected double eps;
 	
-	public EpsilonEqualStates(double epsilon) {
-		this.epsilon = epsilon;
+	public EpsilonEqualStates(double eps) {
+		this.eps = eps;
 	}
 	
 	@Override

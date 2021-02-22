@@ -7,8 +7,8 @@ import simulator.model.Body;
 import simulator.model.PhysicsSimulator;
 
 public class Controller {
-	private PhysicsSimulator simulador;
-	private Factory<Body> factoria;
+	protected PhysicsSimulator simulador;
+	protected Factory<Body> factoria;
 	
 	public Controller(PhysicsSimulator simulador, Factory<Body> factoria) {
 		this.simulador = simulador;

@@ -3,16 +3,16 @@ import org.json.JSONObject;
 
 import simulator.misc.Vector2D;
 public class Body {
-	private String id;
-	private Vector2D pos, vel, force;
-	private double mass;
+	protected String id;
+	protected Vector2D pos, vel, force;
+	protected double mass;
 	
 	public Body(String id, Vector2D pos, Vector2D vel, double mass) {
 		this.id = id;
 		this.pos = pos;
 		this.vel = vel;
 		this.mass = mass;
-		//Habra que inicializar la fuerza?
+		this.force = new Vector2D(0,0);
 	}
 	
 	public String getId() {
