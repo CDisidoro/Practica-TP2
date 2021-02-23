@@ -8,7 +8,7 @@ public class MassEqualStateBuilder extends Builder<StateComparator>{
 		//Pendiente de Programar
 	}
 	@Override
-	public StateComparator createTheInstance(JSONObject info) {
+	protected StateComparator createTheInstance(JSONObject info) {
 		//Pendiente de Programar
 		return null;
 	}

@@ -8,7 +8,7 @@ public class NoForceBuilder extends Builder<ForceLaws>{
 		//Pendiente de Programar
 	}
 	@Override
-	public ForceLaws createTheInstance(JSONObject info) {
+	protected ForceLaws createTheInstance(JSONObject info) {
 		//Pendiente de Programar
 		return null;
 	}

@@ -10,12 +10,12 @@ public class BasicBodyBuilder extends Builder<Body>{
 	}
 	
 	@Override
-	public Body createTheInstance(JSONObject info) {
+	protected Body createTheInstance(JSONObject info) {
 		//Pendiente de Programar
 		return null;
 	}
 	
-	public JSONObject createData() {
+	protected JSONObject createData() {
 		//Pendiente de Programar
 	}
 	

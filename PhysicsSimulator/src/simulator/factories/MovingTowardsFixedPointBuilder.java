@@ -8,12 +8,12 @@ public class MovingTowardsFixedPointBuilder extends Builder<ForceLaws>{
 		//Pendiente de Programar
 	}
 	@Override
-	public ForceLaws createTheInstance(JSONObject info) {
+	protected ForceLaws createTheInstance(JSONObject info) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 	
-	public JSONObject createData() {
+	protected JSONObject createData() {
 		//Pendiente de Programar
 	}
 

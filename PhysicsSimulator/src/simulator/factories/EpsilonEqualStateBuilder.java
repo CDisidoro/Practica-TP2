@@ -8,12 +8,12 @@ public class EpsilonEqualStateBuilder extends Builder<StateComparator>{
 		//Pendiente de Programar
 	}
 	@Override
-	public StateComparator createTheInstance(JSONObject info) {
+	protected StateComparator createTheInstance(JSONObject info) {
 		//Pendiente de Programar
 		return null;
 	}
 	
-	public JSONObject createData() {
+	protected JSONObject createData() {
 		//Pendiente de Programar
 	}
 
