@@ -12,7 +12,7 @@ public class Body {
 		this.pos = pos;
 		this.vel = vel;
 		this.mass = mass;
-		this.force = new Vector2D(0,0);
+		this.force = new Vector2D();
 	}
 	
 	public String getId() {
@@ -36,15 +36,22 @@ public class Body {
 	}
 	
 	public void addForce(Vector2D forceAdded) {
-		//force = forceAdded; Esto no deberia ser suficiente, hay que revisarlo bien
+		force = force.plus(forceAdded);
 	}
 	
 	public void resetForce() {
-		//force = 0; Hay que hacer algo distinto para resetear la fuerza
+		force = new Vector2D();
 	}
 	
-	public void move(double moving) {
-		//Pendiente de programar
+	public void move(double t) {
+		Vector2D aceleracion;
+		if(mass == 0.0) {
+			aceleracion = new Vector2D();
+		}else {
+			aceleracion = force.scale(1/mass);
+		}
+		pos = pos.plus(vel.scale(t).plus(aceleracion.scale(0.5).scale(t * t))); //Ojo con esta llamada, se ve peligrosa D:
+		vel = vel.plus(aceleracion.scale(t));
 	}
 	
 	public boolean equals(Object o) {
@@ -56,6 +63,6 @@ public class Body {
 	}
 	
 	public String toString() {
-		//Pendiente de Programar
+		return getState().toString();
 	}
 }

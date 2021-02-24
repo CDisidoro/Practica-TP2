@@ -15,9 +15,9 @@ public abstract class Builder<T> {
 		//Pendiente de Programar
 	}
 	
-	protected JSONObject createData() { //Es el modificador de acceso correcto? (En UML es un rombo amarillo)
+	protected JSONObject createData() {
 		//Pendiente de Programar
 	}
 	
-	protected abstract T createTheInstance(JSONObject info); //Es el modificador de acceso correcto? (Rombo amarillo en UML)
+	protected abstract T createTheInstance(JSONObject info);
 }
