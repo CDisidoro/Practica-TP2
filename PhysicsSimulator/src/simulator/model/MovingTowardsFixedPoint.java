@@ -18,7 +18,7 @@ public class MovingTowardsFixedPoint implements ForceLaws{
 	}
 	
 	public String toString() {
-		//Pendiente de Programar
+		return vector.toString() + "k: " + k; //Esta bien Programado?
 	}
 	
 }

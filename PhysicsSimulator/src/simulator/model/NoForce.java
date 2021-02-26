@@ -13,6 +13,6 @@ public class NoForce implements ForceLaws{
 	}
 	
 	public String toString() {
-		// Pendiente de Programar
+		return ""; //Esta bien programado?
 	}
 }

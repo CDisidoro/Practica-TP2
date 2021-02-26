@@ -1,5 +1,8 @@
 package simulator.model;
 
+import java.util.Iterator;
+import java.util.List;
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 public class PhysicsSimulator {
@@ -13,7 +16,7 @@ public class PhysicsSimulator {
 	}
 	
 	public void addBody(Body newBody) {
-		//Pendiente de Programar
+		bod.add(newBody);
 	}
 	
 	public void advance() {
@@ -21,10 +24,20 @@ public class PhysicsSimulator {
 	}
 	
 	public JSONObject getState() {
-		// Pendiente de Programar
+		JSONObject estado = new JSONObject();
+		JSONArray arrayBodies = new JSONArray();
+		//Iterador de Bodies
+		Iterator<Body> iterador = bod.iterator();
+		estado.put("time", timePerStep);
+		//Llena el array de Bodies llamando al getState del Body encontrado
+		while(iterador.hasNext()) {
+			arrayBodies.put(iterador.next().getState());
+		}
+		estado.put("bodies", arrayBodies);
+		return estado;
 	}
 	
 	public String toString() {
-		// Pendiente de Programar
+		return getState().toString();
 	}
 }

@@ -8,6 +8,10 @@ public class NewtonUniversalGravitation implements ForceLaws{
 	public NewtonUniversalGravitation(double k) {
 		this.k = k;
 	}
+	//En caso de que no se proporcione la constante
+	public NewtonUniversalGravitation() {
+		k = 6.67E10-11;
+	}
 	
 	@Override
 	public void apply(List<Body> bs) {
@@ -15,6 +19,6 @@ public class NewtonUniversalGravitation implements ForceLaws{
 	}
 
 	public String toString() {
-		// Pendiente de Programar
+		return "k: " + k;
 	}
 }
