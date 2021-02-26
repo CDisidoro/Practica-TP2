@@ -196,7 +196,7 @@ public class Main {
 	}
 
 	private static void parseForceLawsOption(CommandLine line) throws ParseException {
-		String fl = line.getOptionValue("gl", _forceLawsDefaultValue);
+		String fl = line.getOptionValue("fl", _forceLawsDefaultValue);
 		_forceLawsInfo = parseWRTFactory(fl, _forceLawsFactory);
 		if (_forceLawsInfo == null) {
 			throw new ParseException("Invalid force laws: " + fl);
