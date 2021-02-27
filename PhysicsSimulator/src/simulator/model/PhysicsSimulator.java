@@ -21,10 +21,9 @@ public class PhysicsSimulator {
 		while(iterador.hasNext()) {
 			bi=iterador.next();
 			if(bi.id.equals(newBody.id))
-			throw new IllegalArgumentException();
-			else
-			bod.add(newBody);
+				throw new IllegalArgumentException();
 		}
+		bod.add(newBody);
 	}
 	
 	public void advance() {
