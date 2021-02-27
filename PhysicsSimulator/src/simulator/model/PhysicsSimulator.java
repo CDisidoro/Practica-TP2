@@ -16,11 +16,32 @@ public class PhysicsSimulator {
 	}
 	
 	public void addBody(Body newBody) {
-		bod.add(newBody);
+		Iterator<Body> iterador = bod.iterator();
+		Body bi;
+		while(iterador.hasNext()) {
+			bi=iterador.next();
+			if(bi.id.equals(newBody.id))
+			throw new IllegalArgumentException();
+			else
+			bod.add(newBody);
+		}
 	}
 	
 	public void advance() {
 		// Pendiente de Programar
+		Iterator<Body> iterator = bod.iterator();
+		Body bi;
+		while(iterator.hasNext()) {
+			bi= iterator.next();
+			bi.resetForce();
+		}
+		law.apply(bod);
+		Iterator<Body> iterator2 = bod.iterator();
+		Body bi2;
+		while(iterator2.hasNext()) {
+			bi2= iterator2.next();
+			bi2.move(timePerStep);
+		}
 	}
 	
 	public JSONObject getState() {
