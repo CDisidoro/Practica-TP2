@@ -47,6 +47,7 @@ public class NewtonUniversalGravitation implements ForceLaws{
 						force = bj.getPosition().minus(bi.getPosition()).scale(fij);
 					}
 					bi.addForce(force); //Suma las fuerzas
+					bi.aceleracion = bi.getForce().scale(1/bi.getMass()); //Aceleracion = Fuerza / Masa
 				}
 			}
 		}

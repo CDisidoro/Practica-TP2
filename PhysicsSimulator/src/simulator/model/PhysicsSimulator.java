@@ -9,7 +9,7 @@ public class PhysicsSimulator {
 	protected ForceLaws law;
 	protected double timePerStep;
 	protected List<Body> bod;
-	public PhysicsSimulator(ForceLaws law, double timePerStep) {
+	public PhysicsSimulator(ForceLaws law, double timePerStep) throws IllegalArgumentException{
 		this.law = law;
 		this.timePerStep = timePerStep;
 		//Hay que hacer algo con Body?
