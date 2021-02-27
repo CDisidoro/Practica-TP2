@@ -37,6 +37,10 @@ public class Body {
 		return force;
 	}
 	
+	public Vector2D getAceleracion() {
+		return aceleracion;
+	}
+	
 	public void addForce(Vector2D forceAdded) {
 		force = force.plus(forceAdded);
 	}
@@ -60,8 +64,12 @@ public class Body {
 	}
 	
 	public boolean equals(Object o) {
-		//Pendiente de programar
-		return false;
+		if(!(o instanceof Body)) {
+			return false;
+		}
+		Body bod = (Body) o;
+		return (id.equals(bod.getId()) && mass == bod.getMass() && pos.equals(bod.getPosition()) && vel.equals(bod.getVelocity())
+				&& force.equals(bod.getForce()) && aceleracion.equals(bod.getAceleracion()));
 	}
 	
 	public JSONObject getState() {
