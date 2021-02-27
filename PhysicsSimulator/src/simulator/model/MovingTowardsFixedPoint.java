@@ -7,16 +7,21 @@ import simulator.misc.Vector2D;
 public class MovingTowardsFixedPoint implements ForceLaws{
 	
 	protected Vector2D vector;
-	protected double k;
+	protected double k, g;
 	public MovingTowardsFixedPoint (Vector2D vector, double k) {
 		this.vector = vector;
 		this.k = k;
+		this.g=9.81;
 	}
 	
 	@Override
 	public void apply(List<Body> bs) {
 		// Pendiente de Programar
-		Iterator<Body> iterador = bs.iterator();
+		Iterator<Body> iterator = bs.iterator();
+		Body bi;
+		while(iterator.hasNext()) {
+			bi=iterator.next();
+			bi.aceleracion = bi.getPosition().scale(-g);
 	}
 	
 	public String toString() {
