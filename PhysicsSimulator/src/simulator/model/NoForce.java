@@ -5,7 +5,6 @@ import java.util.List;
 public class NoForce implements ForceLaws{
 	
 	public NoForce() {
-		// Pendiente de Programar
 	}
 
 	@Override
@@ -13,6 +12,6 @@ public class NoForce implements ForceLaws{
 	}
 	
 	public String toString() {
-		return ""; //Esta bien programado?
+		return ""; //Habria que poner NoForce aqui por Debugging?
 	}
 }

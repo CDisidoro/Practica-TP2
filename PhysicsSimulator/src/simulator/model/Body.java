@@ -5,7 +5,7 @@ import org.json.JSONObject;
 import simulator.misc.Vector2D;
 public class Body {
 	protected String id;
-	protected Vector2D pos, vel, force;
+	protected Vector2D pos, vel, force, aceleracion;
 	protected double mass;
 	
 	public Body(String id, Vector2D pos, Vector2D vel, double mass) {
@@ -14,6 +14,7 @@ public class Body {
 		this.vel = vel;
 		this.mass = mass;
 		this.force = new Vector2D();
+		this.aceleracion = new Vector2D();
 	}
 	
 	public String getId() {
@@ -45,7 +46,6 @@ public class Body {
 	}
 	
 	public void move(double t) {
-		Vector2D aceleracion;
 		//Si la masa es cero la aceleracion es nula, en caso opuesto se usa scale para dividir la fuerza por la masa
 		if(mass == 0.0) {
 			aceleracion = new Vector2D();
