@@ -20,17 +20,22 @@ public class MovingTowardsFixedPoint implements ForceLaws{
 	
 	@Override
 	public void apply(List<Body> bs) {
-		// Pendiente de Programar
 		Iterator<Body> iterator = bs.iterator();
 		Body bi;
 		while(iterator.hasNext()) {
 			bi=iterator.next();
-			bi.aceleracion = bi.getPosition().scale(-g);
+			if(vector.getX() == 0.0 && vector.getY() == 0.0) {
+				bi.aceleracion = bi.getPosition().scale(-g); //Aceleracion = Direccion * -G
+			}else {
+				bi.aceleracion = vector.minus(bi.getPosition()).direction(); //Aceleracion = (Punto - Posicion)/(Pitagoras)
+			}
+			//Agrega la fuerza
+			bi.addForce(bi.aceleracion.scale(bi.getMass())); // Fuerza = Masa * Aceleracion
 		}
 	}
 	
 	public String toString() {
-		return vector.toString() + ", g: " + g; //Esta bien Programado? Sus unicos parametros son k y el vector
+		return vector.toString() + ", g: " + g;
 	}
 	
 }

@@ -1,7 +1,6 @@
 package simulator.model;
-import org.json.JSONArray;
-import org.json.JSONObject;
 
+import org.json.JSONObject;
 import simulator.misc.Vector2D;
 public class Body {
 	protected String id;
@@ -14,7 +13,6 @@ public class Body {
 		this.vel = vel;
 		this.mass = mass;
 		this.force = new Vector2D();
-		this.aceleracion = new Vector2D();
 	}
 	
 	public String getId() {
@@ -37,10 +35,6 @@ public class Body {
 		return force;
 	}
 	
-	public Vector2D getAceleracion() {
-		return aceleracion;
-	}
-	
 	public void addForce(Vector2D forceAdded) {
 		force = force.plus(forceAdded);
 	}
@@ -58,7 +52,7 @@ public class Body {
 		}
 		//A la posicion se le suma el resultado de multiplicar la velocidad por el tiempo mas el producto de
 		//dividir aceleracion a la mitad y multiplicarlo por t al cuadrado
-		pos = pos.plus(vel.scale(t).plus(aceleracion.scale(0.5).scale(t * t))); //Ojo con esta llamada, se ve peligrosa D:
+		pos = pos.plus(vel.scale(t).plus(aceleracion.scale(0.5).scale(t * t)));
 		//A velocidad el sumamos el producto de la aceleracion por el tiempo
 		vel = vel.plus(aceleracion.scale(t));
 	}
@@ -68,31 +62,16 @@ public class Body {
 			return false;
 		}
 		Body bod = (Body) o;
-		return (id.equals(bod.getId()) && mass == bod.getMass() && pos.equals(bod.getPosition()) && vel.equals(bod.getVelocity())
-				&& force.equals(bod.getForce()) && aceleracion.equals(bod.getAceleracion()));
+		return (id.equals(bod.getId()));
 	}
 	
 	public JSONObject getState() {
-		//Crea el JSON a retornar
 		JSONObject estado = new JSONObject();
-		//Crea los JSON Arrays para cada vector del cuerpo
-		JSONArray position = new JSONArray();
-		JSONArray velocity = new JSONArray();
-		JSONArray force = new JSONArray();
 		estado.put("id", id);
 		estado.put("m", mass);
-		//Llenamos el array posicion
-		position.put(pos.getX());
-		position.put(pos.getY());
-		estado.put("p", position);
-		//Llenamos el array velocidad
-		velocity.put(vel.getX());
-		velocity.put(vel.getY());
-		estado.put("v", velocity);
-		//Llenamos el array fuerza
-		force.put(this.force.getX());
-		force.put(this.force.getY());
-		estado.put("f", force);
+		estado.put("p", pos.asJSONArray());
+		estado.put("v", vel.asJSONArray());
+		estado.put("f", force.asJSONArray());
 		return estado;
 	}
 	

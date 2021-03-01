@@ -17,17 +17,14 @@ public class NewtonUniversalGravitation implements ForceLaws{
 	
 	@Override
 	public void apply(List<Body> bs) {
-		// Pendiente de Programar
 		//Calculo de la Fuerza
 		Iterator<Body> iterador = bs.iterator();
 		Iterator<Body> iterTemp;
 		double producto, distancia, fij;
 		Vector2D force = new Vector2D();
-		Vector2D sumaForce = new Vector2D();
 		Body bi, bj;
 		while(iterador.hasNext()) {
 			bi = iterador.next();
-			sumaForce = new Vector2D(); //Resetea la suma de fuerzas por cada Body nuevo
 			if(bi.getMass() == 0.0) {
 				bi.vel = new Vector2D();
 				bi.aceleracion = new Vector2D();
@@ -40,20 +37,19 @@ public class NewtonUniversalGravitation implements ForceLaws{
 					bj = iterTemp.next();
 					if(!(bi.equals(bj))) {
 						//Calculo del vector fuerza
-						producto = g*bi.getMass()*bj.getMass();
-						distancia = bi.getPosition().distanceTo(bj.getPosition());
+						producto = g*bi.getMass()*bj.getMass(); // P = G * Masa^2
+						distancia = bj.getPosition().distanceTo(bi.getPosition()); // D = Dj - Di
 						distancia *= distancia;
-						fij = producto/distancia;
-						force = bj.getPosition().minus(bi.getPosition()).scale(fij);
+						fij = producto/distancia; // f = P/D^2
+						force = bj.getPosition().minus(bi.getPosition()).direction().scale(fij); // F = (Dj - Di)/(Pitagoras) * f
 					}
 					bi.addForce(force); //Suma las fuerzas
-					bi.aceleracion = bi.getForce().scale(1/bi.getMass()); //Aceleracion = Fuerza / Masa
 				}
 			}
 		}
 	}
 
 	public String toString() {
-		return "G: " + g; //Esta bien programado? Su unico atributo es la constante de gravedad
+		return "G: " + g;
 	}
 }

@@ -1,5 +1,6 @@
 package simulator.model;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import org.json.JSONArray;
@@ -7,27 +8,22 @@ import org.json.JSONObject;
 
 public class PhysicsSimulator {
 	protected ForceLaws law;
-	protected double timePerStep;
+	protected double timePerStep, currentTime;
 	protected List<Body> bod;
 	public PhysicsSimulator(ForceLaws law, double timePerStep) throws IllegalArgumentException{
 		this.law = law;
 		this.timePerStep = timePerStep;
-		//Hay que hacer algo con Body?
+		bod = new ArrayList<Body>();
+		currentTime = 0.0;
 	}
 	
 	public void addBody(Body newBody) {
-		Iterator<Body> iterador = bod.iterator();
-		Body bi;
-		while(iterador.hasNext()) {
-			bi=iterador.next();
-			if(bi.id.equals(newBody.id))
-				throw new IllegalArgumentException();
-		}
+		if(bod.contains(newBody))
+			throw new IllegalArgumentException("El cuerpo que se ha intentado añadir ya existe");
 		bod.add(newBody);
 	}
 	
 	public void advance() {
-		// Pendiente de Programar
 		Iterator<Body> iterator = bod.iterator();
 		Body bi;
 		while(iterator.hasNext()) {
@@ -41,6 +37,7 @@ public class PhysicsSimulator {
 			bi2= iterator2.next();
 			bi2.move(timePerStep);
 		}
+		currentTime = currentTime + timePerStep;
 	}
 	
 	public JSONObject getState() {
@@ -48,7 +45,7 @@ public class PhysicsSimulator {
 		JSONArray arrayBodies = new JSONArray();
 		//Iterador de Bodies
 		Iterator<Body> iterador = bod.iterator();
-		estado.put("time", timePerStep);
+		estado.put("time", currentTime);
 		//Llena el array de Bodies llamando al getState del Body encontrado
 		while(iterador.hasNext()) {
 			arrayBodies.put(iterador.next().getState());

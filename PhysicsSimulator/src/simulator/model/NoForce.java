@@ -12,6 +12,6 @@ public class NoForce implements ForceLaws{
 	}
 	
 	public String toString() {
-		return ""; //Habria que poner NoForce aqui por Debugging?
+		return "";
 	}
 }
