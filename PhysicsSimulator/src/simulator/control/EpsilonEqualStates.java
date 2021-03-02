@@ -1,9 +1,8 @@
 package simulator.control;
 
-import java.util.Iterator;
 import org.json.JSONArray;
 import org.json.JSONObject;
-import simulator.model.Body;
+import simulator.misc.Vector2D;
 
 public class EpsilonEqualStates implements StateComparator{
 	protected double eps;
@@ -14,33 +13,41 @@ public class EpsilonEqualStates implements StateComparator{
 	
 	@Override
 	public boolean equal(JSONObject s1, JSONObject s2) {
-		boolean igualModEps = true;
+		Vector2D p1,p2,v1,v2,f1,f2;
 		//Obtengo el array de Bodies del Object
 		JSONArray arrayBodies1 = new JSONArray();
 		JSONArray arrayBodies2 = new JSONArray();
 		//Usar un array con su longitud directamente en vez de usar iterador
 		arrayBodies1 = s1.getJSONArray("bodies");
 		arrayBodies2 = s2.getJSONArray("bodies");
-		//Creo el iterador para recorrer el array
-		Iterator<Object> itS1 = arrayBodies1.iterator();
-		Iterator<Object> itS2 = arrayBodies2.iterator();
 		JSONObject b1,b2;
 		//Si las longitudes son distinas entonces se sabe que son distintos
 		if(arrayBodies1.length() != arrayBodies2.length()) {
 			return false;
 		}else {
-			while(itS1.hasNext() && itS2.hasNext()) { //No se puede convertir a body, hay que usar JSONObject
-				b1 = s1.getJSONObject(((Body) itS1.next()).getId());
-				b2 = s2.getJSONObject(((Body) itS1.next()).getId());
-				
-				/*
-				if(b1.getId() != b2.getId() || Math.abs(b1.getMass() - b2.getMass()) > eps || 
-						b1.getPosition().distanceTo(b2.getPosition()) > eps || b1.getVelocity().distanceTo(b2.getVelocity()) > eps
-						|| b1.getForce().distanceTo(b2.getForce()) > eps) {
-					igualModEps = false;
-				}*/
+			//Usar un bucle for que recorre segun la longitud del array
+			for(int i = 0; i< arrayBodies1.length(); i++) {
+				//Covierte a JSONObject el objeto almacenado en la posicion i de S1 y S2 para poderlo manipular
+				b1 = arrayBodies1.getJSONObject(i);
+				b2 = arrayBodies2.getJSONObject(i);
+				//Hay que obtener los vectores de cada cuerpo
+				//Vectores Posicion
+				p1 = new Vector2D(b1.getJSONArray("p").getDouble(0), b1.getJSONArray("p").getDouble(1));
+				p2 = new Vector2D(b2.getJSONArray("p").getDouble(0), b2.getJSONArray("p").getDouble(1));
+				//Vectores Velocidad
+				v1 = new Vector2D(b1.getJSONArray("v").getDouble(0), b1.getJSONArray("v").getDouble(1));
+				v2 = new Vector2D(b2.getJSONArray("v").getDouble(0), b2.getJSONArray("v").getDouble(1));
+				//Vectores Fuerza
+				f1 = new Vector2D(b1.getJSONArray("f").getDouble(0), b1.getJSONArray("f").getDouble(1));
+				f2 = new Vector2D(b2.getJSONArray("f").getDouble(0), b2.getJSONArray("f").getDouble(1));
+				//Condicional (Si no se cumple retorna falso)
+				if(! (b1.getString("id").equals(b2.getString("id")) && Math.abs(b1.getDouble("m") - b2.getDouble("m")) <= eps
+						&& p1.distanceTo(p2) <= eps && v1.distanceTo(v2) <= eps && f1.distanceTo(f2) <= eps) ) {
+					return false;
+				}
 			}
-			return (s1.getDouble("time") == s2.getDouble("time") && igualModEps);
+			//Por ultimo comprueba si los tiempos son iguales en los dos estados
+			return (s1.getDouble("time") == s2.getDouble("time"));
 		}
 		}
 
