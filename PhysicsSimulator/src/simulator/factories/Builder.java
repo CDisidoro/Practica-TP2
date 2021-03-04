@@ -3,12 +3,25 @@ package simulator.factories;
 import org.json.JSONObject;
 
 public abstract class Builder<T> {
-	public Builder() {
-		
+	protected String typeTag, desc;
+	public Builder(String typeTag, String desc) {
+		this.typeTag = typeTag;
+		this.desc = desc;
 	}
 	
-	public T createInstance (JSONObject info) {
+	public T createInstance(JSONObject info) throws IllegalArgumentException {
 		//Pendiente de Programar
+		typeTag = info.getString("type");
+		switch(typeTag) {
+		case "basic":
+			
+			break;
+		case "mlb":
+			
+			break;
+		default:
+			return null;
+		}
 	}
 	
 	public JSONObject getBuilderInfo() {
