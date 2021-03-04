@@ -10,9 +10,13 @@ public class BuilderBasedFactory<T> implements Factory<T>{
 	}
 	@Override
 	public T createInstance(JSONObject info) throws IllegalArgumentException{
-		//Pendiente de Programar
-		
-		return null;
+		int i = 0;
+		T b = null;
+		while (b == null && i < builders.size()) {
+			
+		}
+		if (b == null) throw new IllegalArgumentException();
+		return b;
 	}
 
 	@Override
