@@ -11,7 +11,7 @@ public abstract class Builder<T> {
 	
 	public T createInstance(JSONObject info) throws IllegalArgumentException {
 		//Pendiente de Programar
-		typeTag = info.getString("type");
+		/*typeTag = info.getString("type");
 		switch(typeTag) {
 		case "basic":
 			
@@ -21,11 +21,19 @@ public abstract class Builder<T> {
 			break;
 		default:
 			return null;
-		}
+		}*/
+		 T b = null;
+		 if (typeTag != null && typeTag.equals(info.getString("type")))
+			 return null;//b = ? crear un objeto de tipo 
+		 return b;
 	}
 	
 	public JSONObject getBuilderInfo() {
-		//Pendiente de Programar
+		JSONObject info = new JSONObject();
+		 info.put("type", typeTag);
+		 info.put("data", new JSONObject());
+		 info.put("desc", desc);
+		 return info;
 	}
 	
 	protected JSONObject createData() {
