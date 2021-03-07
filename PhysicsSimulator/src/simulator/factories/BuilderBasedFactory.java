@@ -19,7 +19,7 @@ public class BuilderBasedFactory<T> implements Factory<T>{
 				return b;
 			} 
 		}
-	 throw new IllegalArgumentException();
+	 throw new IllegalArgumentException("Error al crear la instancia");
 	}
 
 	@Override
