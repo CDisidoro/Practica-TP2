@@ -1,20 +1,25 @@
 package simulator.factories;
 
 import org.json.JSONObject;
+
+import simulator.control.EpsilonEqualStates;
 import simulator.control.StateComparator;
 
 public class EpsilonEqualStateBuilder extends Builder<StateComparator>{
 	public EpsilonEqualStateBuilder() {
-		//Pendiente de Programar
+		this.typeTag="epseq";
+		this.desc="Comparador de Igualdad Modulo Epsilon";
 	}
 	@Override
 	protected StateComparator createTheInstance(JSONObject info) {
-		//Pendiente de Programar
-		return null;
+		double eps = info.getDouble("eps");
+		return new EpsilonEqualStates(eps);
 	}
 	
 	protected JSONObject createData() {
-		//Pendiente de Programar
+		JSONObject info = new JSONObject();
+		info.put("eps", "Modulo Epsilon");
+		return info;
 	}
 
 }

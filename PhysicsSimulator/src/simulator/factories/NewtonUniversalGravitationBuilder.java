@@ -2,20 +2,26 @@ package simulator.factories;
 
 import org.json.JSONObject;
 import simulator.model.ForceLaws;
+import simulator.model.NewtonUniversalGravitation;
 
 public class NewtonUniversalGravitationBuilder extends Builder<ForceLaws>{
 	public NewtonUniversalGravitationBuilder() {
-		//Pendiente de Programar
+		this.typeTag="nlug";
+		this.desc="Ley de Fuerza Gravitacional de Newton";
 	}
 
 	@Override
 	protected ForceLaws createTheInstance(JSONObject info) {
-		// TODO Auto-generated method stub
-		return null;
+		if(info.has("G")) {
+			return new NewtonUniversalGravitation(info.getDouble("G"));
+		}
+		return new NewtonUniversalGravitation();
 	}
 	
 	protected JSONObject createData() {
-		//Pendiente de Programar
+		JSONObject info = new JSONObject();
+		info.put("G", "Constante de gravedad");
+		return info;
 	}
 	
 }

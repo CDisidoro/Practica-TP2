@@ -2,15 +2,16 @@ package simulator.factories;
 
 import org.json.JSONObject;
 import simulator.model.ForceLaws;
+import simulator.model.NoForce;
 
 public class NoForceBuilder extends Builder<ForceLaws>{
 	public NoForceBuilder() {
-		//Pendiente de Programar
+		this.typeTag="ng";
+		this.desc="Sin Fuerza";
 	}
 	@Override
 	protected ForceLaws createTheInstance(JSONObject info) {
-		//Pendiente de Programar
-		return null;
+		return new NoForce();
 	}
 
 }

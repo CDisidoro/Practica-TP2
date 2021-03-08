@@ -9,14 +9,14 @@ public class BasicBodyBuilder extends Builder<Body>{
 
 	public BasicBodyBuilder() {
 		this.typeTag="basic";
-		this.desc="cuerpoBasico";
+		this.desc="Cuerpo Basico";
 	}
 	
 	@Override
 	protected Body createTheInstance(JSONObject data) {
 		String id= data.getString("id");
-		Vector2D vel= new Vector2D(data.getJSONArray("vel"));//como sacar el vector de data tipo JSONObject
-		Vector2D pos = new Vector2D(data.getJSONArray("pos"));;
+		Vector2D vel= new Vector2D(data.getJSONArray("vel"));
+		Vector2D pos = new Vector2D(data.getJSONArray("pos"));
 		double mass = data.getDouble("mass");
 		
 		return new Body(id,vel,pos,mass);
@@ -25,10 +25,10 @@ public class BasicBodyBuilder extends Builder<Body>{
 	public JSONObject createData() {
 		JSONObject data = new JSONObject();
 
-		data.put("id", //????);///uqe pongo aqui?
-		data.put("pos", //???);
-		data.put("vel", );
-		data.put("mass", );
+		data.put("id", "Identificador");
+		data.put("p", "Posicion");
+		data.put("v", "Velocidad");
+		data.put("m", "Masa");
 		
 		return data;
 	}
