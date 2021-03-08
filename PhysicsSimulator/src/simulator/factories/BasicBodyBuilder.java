@@ -13,8 +13,8 @@ public class BasicBodyBuilder extends Builder<Body>{
 	@Override
 	protected Body createTheInstance(JSONObject data) {
 		String id= data.getString("id");
-		Vector2D vel= ;//como sacar el vector de data tipo JSONObject
-		Vector2D pos = ;
+		Vector2D vel= new Vector2D(data.getJSONArray("vel"));//como sacar el vector de data tipo JSONObject
+		Vector2D pos = new Vector2D(data.getJSONArray("pos"));;
 		double mass = data.getDouble("mass");
 		
 		return new Body(id,vel,pos,mass);
