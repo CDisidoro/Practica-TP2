@@ -23,7 +23,12 @@ public class Vector2D {
 		_x = x;
 		_y = y;
 	}
-
+	//solo teniaendo la clave del jsonArray//////////Mirarlo en tutoria///////////
+	public Vector2D (JSONArray jsonArray) {
+		_x=jsonArray.getDouble(0);
+		_y=jsonArray.getDouble(1);
+		//return new Vector2D(c,b);
+	}
 	// return the inner product of this Vector a and b
 	public double dot(Vector2D that) {
 		return _x * that._x + _y * that._y;
