@@ -17,6 +17,9 @@ public class BuilderBasedFactory<T> implements Factory<T>{
 		//nulo (Es decir que no coincide el tipo de Instancia) seguira buscando para cada Builder
 		//Si encuentra el Builder correcto retornara el objeto. En caso contrario, lanzará una IllegalArgumentException
 		T b = null;
+		if(info == null) { //Si la informacion recibida es nula se lanza una excepcion de que no ha sido posible crear la instancia
+			throw new IllegalArgumentException("Error al crear la instancia");
+		}
 		for(Builder<T> bb: builders) {
 			b=bb.createInstance(info);
 			if(b!=null) {

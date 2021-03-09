@@ -6,12 +6,13 @@ import simulator.misc.Vector2D;
 
 public class EpsilonEqualStates implements StateComparator{
 	protected double eps;
-	
+	//Constructor del Comparador de Estados Modulo Epsilon, que recibe por parametro una constante epsilon
 	public EpsilonEqualStates(double eps) {
 		this.eps = eps;
 	}
 	
 	@Override
+	//Comprueba si dos estados del simulador son iguales usando el modulo epsilon
 	public boolean equal(JSONObject s1, JSONObject s2) {
 		Vector2D p1,p2,v1,v2,f1,f2;
 		//Obtengo el array de Bodies del Object

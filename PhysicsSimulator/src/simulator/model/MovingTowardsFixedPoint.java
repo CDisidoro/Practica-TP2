@@ -8,18 +8,17 @@ public class MovingTowardsFixedPoint implements ForceLaws{
 	
 	protected Vector2D vector;
 	protected double g;
-	
+	//Constructor de la Ley de Movimiento a un Punto Fijo, que recibe por parametros el Punto Fijo a donde iran los cuerpos
+	//y la constante de Gravedad
 	public MovingTowardsFixedPoint (Vector2D vector, double g) {
 		this.vector = vector;
 		this.g = g;
 	}
-	public MovingTowardsFixedPoint (Vector2D vector) {
-		this.vector = vector;
-		this.g = 9.81;
-	}
 	
 	@Override
+	//Se aplica la Ley de Movimiento a un Punto Fijo para cada cuerpo de la lista de cuerpos
 	public void apply(List<Body> bs) {
+		//Crea un iterador para recorrer la lista de cuerpos
 		Iterator<Body> iterator = bs.iterator();
 		Body bi;
 		while(iterator.hasNext()) {
@@ -33,7 +32,7 @@ public class MovingTowardsFixedPoint implements ForceLaws{
 			bi.addForce(bi.aceleracion.scale(bi.getMass())); // Fuerza = Masa * Aceleracion
 		}
 	}
-	
+	//Retorna el estado de la Ley de Movimiento a un Punto Fijo en formato String
 	public String toString() {
 		return vector.toString() + ", g: " + g;
 	}

@@ -4,11 +4,12 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 public class MassEqualStates implements StateComparator{
-
+	//Constructor del Comparador de Estados por Masa, que no recibe parametros
 	public MassEqualStates() {
 	}
 	
 	@Override
+	//Comprueba si dos estados del simulador son iguales según su masa
 	public boolean equal(JSONObject s1, JSONObject s2) {
 		//Obtengo el array de Bodies del Object
 		JSONArray arrayBodies1 = new JSONArray();

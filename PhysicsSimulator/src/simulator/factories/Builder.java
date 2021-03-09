@@ -23,9 +23,9 @@ public abstract class Builder<T> {
 		 info.put("desc", desc);
 		 return info;
 	}
-	
+	//Crea un JSONObject con la información relacionada a ese constructor
 	protected JSONObject createData() {
-		//Retorna un nuevo JSONObject (¿Está Vacio?)
+		//Retorna un nuevo JSONObject Vacío (Se rellena en sus clases hijas)
 		return new JSONObject();
 	}
 	//La función abstracta generica que usará cada Builder de los modelos disponibles en el simulador

@@ -3,5 +3,5 @@ package simulator.control;
 import org.json.JSONObject;
 
 public interface StateComparator {
-	boolean equal(JSONObject s1, JSONObject s2);
+	boolean equal(JSONObject s1, JSONObject s2); //Comprueba si dos estados de la simulacion son iguales
 }

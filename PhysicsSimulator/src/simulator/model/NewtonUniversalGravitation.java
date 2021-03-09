@@ -7,15 +7,13 @@ import simulator.misc.Vector2D;
 public class NewtonUniversalGravitation implements ForceLaws{
 	
 	protected double g;
+	//Constructor de la Ley de Newton, que recibe como parametro la constante de gravedad
 	public NewtonUniversalGravitation(double g) {
 		this.g = g;
 	}
-	//En caso de que no se proporcione la constante
-	public NewtonUniversalGravitation() {
-		g = 6.67E10-11;
-	}
 	
 	@Override
+	//Se aplica la Ley de Newton a una lista de cuerpos
 	public void apply(List<Body> bs) {
 		//Calculo de la Fuerza
 		Iterator<Body> iterador = bs.iterator();
@@ -48,7 +46,7 @@ public class NewtonUniversalGravitation implements ForceLaws{
 			}
 		}
 	}
-
+	//Devuelve el estado de la Ley de Newton en formato String
 	public String toString() {
 		return "G: " + g;
 	}
