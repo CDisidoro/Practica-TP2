@@ -1,5 +1,6 @@
 package simulator.launcher;
 
+import java.util.ArrayList;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.DefaultParser;
@@ -8,11 +9,21 @@ import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 import org.json.JSONObject;
-
+import simulator.control.Controller;
 import simulator.control.StateComparator;
+import simulator.factories.BasicBodyBuilder;
+import simulator.factories.Builder;
+import simulator.factories.BuilderBasedFactory;
+import simulator.factories.EpsilonEqualStateBuilder;
 import simulator.factories.Factory;
+import simulator.factories.MassEqualStateBuilder;
+import simulator.factories.MassLosingBodyBuilder;
+import simulator.factories.MovingTowardsFixedPointBuilder;
+import simulator.factories.NewtonUniversalGravitationBuilder;
+import simulator.factories.NoForceBuilder;
 import simulator.model.Body;
 import simulator.model.ForceLaws;
+import simulator.model.PhysicsSimulator;
 
 public class Main {
 
@@ -20,29 +31,43 @@ public class Main {
 	private final static Double _dtimeDefaultValue = 2500.0;
 	private final static String _forceLawsDefaultValue = "nlug";
 	private final static String _stateComparatorDefaultValue = "epseq";
-	private final static int _stepsDefaultValue = 150;
+	private final static Integer _stepsDefaultValue = 150;
 
 	// Algunos atributos para almacenar valores correspondientes a los parametros de la linea de comandos
 	private static Double _dtime = null;
 	private static String _inFile = null;
+	private static String _outFile = null;
+	private static String _eoFile = null;
 	private static JSONObject _forceLawsInfo = null;
 	private static JSONObject _stateComparatorInfo = null;
+	private static Integer _steps = null;
 
 	// Factorias
 	private static Factory<Body> _bodyFactory;
 	private static Factory<ForceLaws> _forceLawsFactory;
 	private static Factory<StateComparator> _stateComparatorFactory;
 
-	//Inicializador de los componentes de la simulacion (Comparadores de Estado, Factorias de Leyes y Cuerpos) - TODO
+	//Inicializador de los componentes de la simulacion (Comparadores de Estado, Factorias de Leyes y Cuerpos)
 	private static void init() {
-		// TODO initialize the bodies factory
-
-		// TODO initialize the force laws factory
-
-		// TODO initialize the state comparator
+		// Inicializacion de Factorias de Cuerpos
+		ArrayList<Builder<Body>> bodyBuilders = new ArrayList<>();
+		bodyBuilders.add(new BasicBodyBuilder());
+		bodyBuilders.add(new MassLosingBodyBuilder());
+		_bodyFactory = new BuilderBasedFactory<Body>(bodyBuilders);
+		// Inicializacion de Factorias de Leyes de Fuerza
+		ArrayList<Builder<ForceLaws>> lawsBuilders = new ArrayList<>();
+		lawsBuilders.add(new NewtonUniversalGravitationBuilder());
+		lawsBuilders.add(new MovingTowardsFixedPointBuilder());
+		lawsBuilders.add(new NoForceBuilder());
+		_forceLawsFactory = new BuilderBasedFactory<ForceLaws>(lawsBuilders);
+		// Inicializacion de Factorias de Comparadores de Estados
+		ArrayList<Builder<StateComparator>> stateBuilders = new ArrayList<>();
+		stateBuilders.add(new MassEqualStateBuilder());
+		stateBuilders.add(new EpsilonEqualStateBuilder());
+		_stateComparatorFactory = new BuilderBasedFactory<StateComparator>(stateBuilders);
 	}
 
-	//Parseo de los argumentos de la linea de comandos - TODO
+	//Parseo de los argumentos de la linea de comandos
 	private static void parseArgs(String[] args) {
 
 		// define the valid command line options
@@ -57,8 +82,9 @@ public class Main {
 
 			parseHelpOption(line, cmdLineOptions);
 			parseInFileOption(line);
-			// TODO add support of -o, -eo, and -s (define corresponding parse methods)
-
+			parseStepsOption(line); //s
+			parseOutFileOption(line); //o
+			parseExpOutFileOption(line); //eo
 			parseDeltaTimeOption(line);
 			parseForceLawsOption(line);
 			parseStateComparatorOption(line);
@@ -163,6 +189,24 @@ public class Main {
 		}
 	}
 
+	//Parseo de la Opcion de Archivo de Salida que lanza un ParseException si no se especifica un archivo de salida
+	//¿Es necesario lanzar una excepcion si no recibe un archivo de salida? Como condicionar un parametro opcional? - TODO
+	private static void parseOutFileOption(CommandLine line) throws ParseException {
+		_outFile = line.getOptionValue("o");
+		if (_outFile == null) {
+			throw new ParseException("In batch mode an output file is required");
+		}
+	}
+	
+	//Parseo de la Opcion de Archivo de Salida Esperada que lanza un ParseException si no se especifica un archivo de comparacion
+	//¿Es necesario lanzar una expecion si no recibe un archivo de comparacion? Como condicionar un parametro opcional? - TODO
+	private static void parseExpOutFileOption(CommandLine line) throws ParseException{
+		_eoFile = line.getOptionValue("eo");
+		if(_eoFile == null) {
+			throw new ParseException("In batch mode an expected output file is required");
+		}
+	}
+	
 	//Parseo de la Opcion del Tiempo Delta que lanza un ParseException si la informacion del tiempo delta es invalida
 	private static void parseDeltaTimeOption(CommandLine line) throws ParseException {
 		String dt = line.getOptionValue("dt", _dtimeDefaultValue.toString());
@@ -174,6 +218,18 @@ public class Main {
 		}
 	}
 
+	//Parseo de la Opcion de Pasos que lanza un ParseException si la informacion de pasos es invalida
+	//¿Es necesario lanzar una expecion si no recibe un archivo de comparacion? Como condicionar un parametro opcional? - TODO
+	private static void parseStepsOption(CommandLine line) throws ParseException{
+		String steps = line.getOptionValue("s", _stepsDefaultValue.toString());
+		try {
+			_steps = Integer.parseInt(steps);
+			assert (_steps > 0);
+		} catch (Exception e) {
+			throw new ParseException("Invalid steps value: " + steps);
+		}
+	}
+	
 	//Parsea el tipo de objeto recibido en el String con el formato (tipo:dato) o (tipo) en un JSONObject
 	private static JSONObject parseWRTFactory(String v, Factory<?> factory) {
 
@@ -235,7 +291,12 @@ public class Main {
 
 	//Inicio del modo Batch - TODO
 	private static void startBatchMode() throws Exception {
-		// TODO complete this method
+		PhysicsSimulator simulador = new PhysicsSimulator(_forceLawsFactory.createInstance(_forceLawsInfo), _dtime); //Crea el simulador
+		//TODO crear los ficheros de E/S
+		_stateComparatorFactory.createInstance(_stateComparatorInfo); //Crea el Comparador de estados
+		Controller controlador = new Controller(simulador, _bodyFactory);
+		controlador.localBodies(null); //TODO Pasar al controlador una lista de cuerpos
+		controlador.run(_steps, null, null, null); //TODO Pasar al controlador la Entrada, Salida, Salida Esperada y Comparador de Estado
 	}
 
 	//Funcion de inicio del simulador que llama al parseo de los argumentos pasados e inicia el modo Batch
