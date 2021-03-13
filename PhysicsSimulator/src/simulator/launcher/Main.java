@@ -1,5 +1,7 @@
 package simulator.launcher;
 
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.util.ArrayList;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
@@ -293,10 +295,13 @@ public class Main {
 	private static void startBatchMode() throws Exception {
 		PhysicsSimulator simulador = new PhysicsSimulator(_forceLawsFactory.createInstance(_forceLawsInfo), _dtime); //Crea el simulador
 		//TODO crear los ficheros de E/S
+		FileInputStream inFile= new FileInputStream(_inFile);
+		FileInputStream eoFile= new FileInputStream(_eoFile);
 		_stateComparatorFactory.createInstance(_stateComparatorInfo); //Crea el Comparador de estados
 		Controller controlador = new Controller(simulador, _bodyFactory);
-		controlador.localBodies(null); //TODO Pasar al controlador una lista de cuerpos
-		controlador.run(_steps, null, null, null); //TODO Pasar al controlador la Entrada, Salida, Salida Esperada y Comparador de Estado
+		controlador.localBodies(inFile); //TODO Pasar al controlador una lista de cuerpos
+		if(_outFile != null)
+		controlador.run(_steps,new FileOutputStream(_outFile), inFile,null ); //TODO Pasar al controlador la Entrada, Salida, Salida Esperada y Comparador de Estado
 	}
 
 	//Funcion de inicio del simulador que llama al parseo de los argumentos pasados e inicia el modo Batch
