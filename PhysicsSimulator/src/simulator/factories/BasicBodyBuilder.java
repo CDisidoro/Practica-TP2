@@ -16,11 +16,11 @@ public class BasicBodyBuilder extends Builder<Body>{
 	//Crea una instancia Body del JSONObject que se pasa por parametro
 	protected Body createTheInstance(JSONObject data) {
 		String id= data.getString("id");
-		Vector2D vel= new Vector2D(data.getJSONArray("vel"));
-		Vector2D pos = new Vector2D(data.getJSONArray("pos"));
-		double mass = data.getDouble("mass");
+		Vector2D vel= new Vector2D(data.getJSONArray("v"));
+		Vector2D pos = new Vector2D(data.getJSONArray("p"));
+		double mass = data.getDouble("m");
 		
-		return new Body(id,vel,pos,mass);
+		return new Body(id,pos,vel,mass);
 	}
 	//Crea un JSONObject con la informacion que debe recibir el Builder para funcionar
 	public JSONObject createData() {

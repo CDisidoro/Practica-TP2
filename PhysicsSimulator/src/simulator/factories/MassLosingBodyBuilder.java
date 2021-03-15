@@ -16,9 +16,9 @@ public class MassLosingBodyBuilder extends Builder<Body>{
 	//Crea una instancia MassLosingBody del JSONObject que se pasa por parametro
 	protected MassLosingBody createTheInstance(JSONObject data) {
 		String id = data.getString("id");
-		Vector2D vel= new Vector2D(data.getJSONArray("vel"));
-		Vector2D pos = new Vector2D(data.getJSONArray("pos"));
-	    double mass = data.getDouble("mass");
+		Vector2D vel= new Vector2D(data.getJSONArray("v"));
+		Vector2D pos = new Vector2D(data.getJSONArray("p"));
+	    double mass = data.getDouble("m");
 	    double lossFrequency = data.getDouble("freq");
 	    double lossFactor = data.getDouble("factor");
 	    return new MassLosingBody(id, pos, vel, mass, lossFactor, lossFrequency);

@@ -49,7 +49,7 @@ public class Controller {
 					if(compare != null) {
 						//Si los estados no son iguales, se lanza una excepcion personalizada con la salida esperada y la salida del simulador
 						if(! (cmp.equal ( compare.getJSONArray("states").getJSONObject(i), simulador.getState() ) ) ) {
-							throw new NotEqualStateException("Los estados no coinciden!", compare.getJSONArray("states").getJSONObject(0), simulador.getState());
+							throw new NotEqualStateException("Los estados no coinciden!", compare.getJSONArray("states").getJSONObject(i), simulador.getState());
 						}
 					}
 				}

@@ -1,7 +1,9 @@
 package simulator.launcher;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.InputStream;
 import java.util.ArrayList;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
@@ -192,21 +194,13 @@ public class Main {
 	}
 
 	//Parseo de la Opcion de Archivo de Salida que lanza un ParseException si no se especifica un archivo de salida
-	//¿Es necesario lanzar una excepcion si no recibe un archivo de salida? Como condicionar un parametro opcional? - TODO
-	private static void parseOutFileOption(CommandLine line) throws ParseException {
+	private static void parseOutFileOption(CommandLine line){
 		_outFile = line.getOptionValue("o");
-		if (_outFile == null) {
-			throw new ParseException("In batch mode an output file is required");
-		}
 	}
 	
 	//Parseo de la Opcion de Archivo de Salida Esperada que lanza un ParseException si no se especifica un archivo de comparacion
-	//¿Es necesario lanzar una expecion si no recibe un archivo de comparacion? Como condicionar un parametro opcional? - TODO
-	private static void parseExpOutFileOption(CommandLine line) throws ParseException{
+	private static void parseExpOutFileOption(CommandLine line){
 		_eoFile = line.getOptionValue("eo");
-		if(_eoFile == null) {
-			throw new ParseException("In batch mode an expected output file is required");
-		}
 	}
 	
 	//Parseo de la Opcion del Tiempo Delta que lanza un ParseException si la informacion del tiempo delta es invalida
@@ -221,12 +215,14 @@ public class Main {
 	}
 
 	//Parseo de la Opcion de Pasos que lanza un ParseException si la informacion de pasos es invalida
-	//¿Es necesario lanzar una expecion si no recibe un archivo de comparacion? Como condicionar un parametro opcional? - TODO
 	private static void parseStepsOption(CommandLine line) throws ParseException{
 		String steps = line.getOptionValue("s", _stepsDefaultValue.toString());
 		try {
 			_steps = Integer.parseInt(steps);
 			assert (_steps > 0);
+			if(_steps <= 0) {
+				_steps = _stepsDefaultValue;
+			}
 		} catch (Exception e) {
 			throw new ParseException("Invalid steps value: " + steps);
 		}
@@ -291,17 +287,23 @@ public class Main {
 		}
 	}
 
-	//Inicio del modo Batch - TODO
+	//Inicio del modo Batch
 	private static void startBatchMode() throws Exception {
 		PhysicsSimulator simulador = new PhysicsSimulator(_forceLawsFactory.createInstance(_forceLawsInfo), _dtime); //Crea el simulador
-		//TODO crear los ficheros de E/S
-		FileInputStream inFile= new FileInputStream(_inFile);
-		FileInputStream eoFile= new FileInputStream(_eoFile);
-		_stateComparatorFactory.createInstance(_stateComparatorInfo); //Crea el Comparador de estados
+		InputStream inFile= new FileInputStream(new File(_inFile));
+		InputStream eoFile= null;
+		if(_eoFile != null) {
+			eoFile = new FileInputStream(new File(_eoFile));
+		}
+		StateComparator cmp = null;
+		cmp = _stateComparatorFactory.createInstance(_stateComparatorInfo);//Crea el Comparador de estados
 		Controller controlador = new Controller(simulador, _bodyFactory);
-		controlador.localBodies(inFile); //TODO Pasar al controlador una lista de cuerpos
-		if(_outFile != null)
-		controlador.run(_steps,new FileOutputStream(_outFile), inFile,null ); //TODO Pasar al controlador la Entrada, Salida, Salida Esperada y Comparador de Estado
+		controlador.localBodies(inFile);
+		if(_outFile != null) {
+			controlador.run(_steps,new FileOutputStream(new File(_outFile)), eoFile, cmp);
+		}else {
+			controlador.run(_steps, System.out, eoFile, cmp);
+		}
 	}
 
 	//Funcion de inicio del simulador que llama al parseo de los argumentos pasados e inicia el modo Batch
