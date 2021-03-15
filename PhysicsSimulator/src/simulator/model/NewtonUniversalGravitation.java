@@ -35,13 +35,13 @@ public class NewtonUniversalGravitation implements ForceLaws{
 					bj = iterTemp.next();
 					if(!(bi.equals(bj))) {
 						//Calculo del vector fuerza
-						producto = g*(bi.getMass()*bj.getMass()); // P = G * Masa^2
-						distancia = bj.getPosition().distanceTo(bi.getPosition()); // D = Dj - Di
+						producto = g*(bi.getMass()*bj.getMass()); // P = G * Masa i * Masa j
+						distancia = bj.getPosition().minus(bi.getPosition()).magnitude();
 						distancia *= distancia;
 						fij = producto/distancia; // f = P/D^2
-						force = bj.getPosition().minus(bi.getPosition()).direction().scale(fij); // F = (Dj - Di)/(Pitagoras) * f
+						force = (bj.getPosition().minus(bi.getPosition())).direction().scale(fij); // F = (Dj - Di)/(Pitagoras) * f
+						bi.addForce(force); //Suma las fuerzas
 					}
-					bi.addForce(force); //Suma las fuerzas
 				}
 			}
 		}
