@@ -2,14 +2,24 @@ package simulator.control;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
-
+/**
+ * Comparador de Estados segun la Masa que implementa a StateComparator
+ * @author Camilo Andres D'isidoro y Jose Ignacio Barrios Oros
+ * @see StateComparator
+ */
 public class MassEqualStates implements StateComparator{
-	//Constructor del Comparador de Estados por Masa, que no recibe parametros
+	/**
+	 * Constructor del Comparador de Estados por Masa, que no recibe parametros
+	 */
 	public MassEqualStates() {
 	}
 	
 	@Override
-	//Comprueba si dos estados del simulador son iguales según su masa
+	/**
+	 * Comprueba si dos estados del simulador son iguales según su masa
+	 * @param s1 Estado 1 a comparar
+	 * @param s2 Estado 2 a comparar
+	 */
 	public boolean equal(JSONObject s1, JSONObject s2) {
 		//Obtengo el array de Bodies del Object
 		JSONArray arrayBodies1 = new JSONArray();

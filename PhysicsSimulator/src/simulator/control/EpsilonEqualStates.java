@@ -3,16 +3,28 @@ package simulator.control;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import simulator.misc.Vector2D;
-
+/**
+ * Comparador de estados Modulo Epsilon que implementa a StateComparator
+ * @author Camilo Andres D'isidoro y Jose Ignacio Barrios Oros
+ * @see StateComparator
+ */
 public class EpsilonEqualStates implements StateComparator{
 	protected double eps;
-	//Constructor del Comparador de Estados Modulo Epsilon, que recibe por parametro una constante epsilon
+	/**
+	 * Constructor del Comparador de Estados Modulo Epsilon, que recibe por parametro una constante epsilon
+	 * @param eps Valor Epsilon con el que se haran las operaciones
+	 */
 	public EpsilonEqualStates(double eps) {
 		this.eps = eps;
 	}
 	
 	@Override
-	//Comprueba si dos estados del simulador son iguales usando el modulo epsilon
+	/**
+	 * Comprueba si dos estados del simulador son iguales usando el modulo epsilon
+	 * @param s1 Estado 1 a comparar
+	 * @param s2 Estado 2 a Comparar
+	 * @return La comparacion de los dos estados, viendo si son iguales modulo epsilon o no
+	 */
 	public boolean equal(JSONObject s1, JSONObject s2) {
 		Vector2D p1,p2,v1,v2,f1,f2;
 		//Obtengo el array de Bodies del Object
