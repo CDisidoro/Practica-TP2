@@ -3,17 +3,26 @@ package simulator.model;
 import java.util.Iterator;
 import java.util.List;
 import simulator.misc.Vector2D;
-
+/**
+ * Ley de la Gravitacion Universal de Newton que implementa la interfaz ForceLaws
+ * @author Camilo Andres D'isidoro y Jose Ignacio Barrios Oros
+ * @see ForceLaws
+ */
 public class NewtonUniversalGravitation implements ForceLaws{
 	
 	protected double g;
-	//Constructor de la Ley de Newton, que recibe como parametro la constante de gravedad
+	/**
+	 * Constructor de la Ley de Newton, que recibe como parametro la constante de gravedad
+	 * @param g Constante de Gravitacion Universal
+	 */
 	public NewtonUniversalGravitation(double g) {
 		this.g = g;
 	}
 	
 	@Override
-	//Se aplica la Ley de Newton a una lista de cuerpos
+	/**
+	 * Se aplica la Ley de Newton a una lista de cuerpos
+	 */
 	public void apply(List<Body> bs) {
 		//Calculo de la Fuerza
 		Iterator<Body> iterador = bs.iterator();
@@ -46,7 +55,10 @@ public class NewtonUniversalGravitation implements ForceLaws{
 			}
 		}
 	}
-	//Devuelve el estado de la Ley de Newton en formato String
+	/**
+	 * Devuelve el estado de la Ley de Newton en formato String
+	 * @return Estado de la Ley de Newton en formato String
+	 */
 	public String toString() {
 		return "G: " + g;
 	}
