@@ -39,7 +39,7 @@ public class NewtonUniversalGravitation implements ForceLaws{
 						distancia = bj.getPosition().minus(bi.getPosition()).magnitude();
 						distancia *= distancia;
 						fij = producto/distancia; // f = P/D^2
-						force = (bj.getPosition().minus(bi.getPosition())).direction().scale(fij); // F = (Dj - Di)/(Pitagoras) * f
+						force = bj.getPosition().minus(bi.getPosition()).direction().scale(fij); // F = (Dj - Di)/(Pitagoras) * f
 						bi.addForce(force); //Suma las fuerzas
 					}
 				}

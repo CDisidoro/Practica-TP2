@@ -48,7 +48,7 @@ public class Body {
 		if(mass == 0.0) {
 			aceleracion = new Vector2D();
 		}else {
-			aceleracion = force.scale(1/mass);
+			aceleracion = force.scale(1.0/mass);
 		}
 		//A la posicion se le suma el resultado de multiplicar la velocidad por el tiempo mas el producto de
 		//dividir aceleracion a la mitad y multiplicarlo por t al cuadrado

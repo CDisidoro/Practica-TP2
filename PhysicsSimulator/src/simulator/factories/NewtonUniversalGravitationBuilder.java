@@ -17,7 +17,7 @@ public class NewtonUniversalGravitationBuilder extends Builder<ForceLaws>{
 		if(info.has("G")) {
 			return new NewtonUniversalGravitation(info.getDouble("G"));
 		}
-		return new NewtonUniversalGravitation(6.67E10-11);
+		return new NewtonUniversalGravitation(6.67E-11);
 	}
 
 	//Crea un JSONObject con la informacion que debe recibir el Builder para funcionar

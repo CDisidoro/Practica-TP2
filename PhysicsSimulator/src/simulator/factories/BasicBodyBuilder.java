@@ -16,8 +16,8 @@ public class BasicBodyBuilder extends Builder<Body>{
 	//Crea una instancia Body del JSONObject que se pasa por parametro
 	protected Body createTheInstance(JSONObject data) {
 		String id= data.getString("id");
-		Vector2D vel= new Vector2D(data.getJSONArray("v"));
-		Vector2D pos = new Vector2D(data.getJSONArray("p"));
+		Vector2D vel= new Vector2D(data.getJSONArray("v").getDouble(0), data.getJSONArray("v").getDouble(1));
+		Vector2D pos = new Vector2D(data.getJSONArray("p").getDouble(0), data.getJSONArray("p").getDouble(1));
 		double mass = data.getDouble("m");
 		
 		return new Body(id,pos,vel,mass);
