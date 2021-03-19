@@ -33,7 +33,7 @@ public class MovingTowardsFixedPoint implements ForceLaws{
 		while(iterator.hasNext()) {
 			bi=iterator.next();
 			if(vector.getX() == 0.0 && vector.getY() == 0.0) {
-				bi.aceleracion = bi.getPosition().scale(-g); //Aceleracion = Direccion * -G
+				bi.aceleracion = bi.getPosition().direction().scale(-g); //Aceleracion = Direccion * -G
 			}else {
 				bi.aceleracion = vector.minus(bi.getPosition()).direction(); //Aceleracion = (Punto - Posicion)/(Pitagoras)
 			}
