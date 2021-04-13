@@ -20,10 +20,10 @@ public class NoForce implements ForceLaws{
 	public void apply(List<Body> bs) {
 	}
 	/**
-	 * Retorna el estado de la Ley Sin Fuerza (Retorna vacío)
-	 * @return Vacio, pues la Ley Sin Fuerza no tiene nada
+	 * Retorna una descripcion de la Ley Sin Fuerza
+	 * @return Una descripcion breve de la Ley
 	 */
 	public String toString() {
-		return "";
+		return "Ley Sin Fuerza";
 	}
 }

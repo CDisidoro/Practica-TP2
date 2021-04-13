@@ -21,10 +21,10 @@ public class PhysicsSimulator {
 	 * @throws IllegalArgumentException Si hay algun argumento erroneo se lanza una IllegalArgumentException
 	 */
 	public PhysicsSimulator(ForceLaws law, double timePerStep) throws IllegalArgumentException{
-		this.law = law;
-		this.timePerStep = timePerStep;
+		setForceLaws(law);
+		setDeltaTime(timePerStep);
 		bod = new ArrayList<Body>();
-		currentTime = 0.0;
+		reset();
 	}
 	/**
 	 * Añade un cuerpo nuevo a la simulacion, en caso de ya existir el cuerpo se lanza un IllegalArgumentException
@@ -82,5 +82,41 @@ public class PhysicsSimulator {
 	 */
 	public String toString() {
 		return getState().toString();
+	}
+	
+	//METODOS PARTE 2
+	/**
+	 * Se vacia la lista de cuerpos y establece el tiempo actual a cero
+	 * @author Camilo Andres D'isidoro y Jose Ignacio Barrios Oros
+	 */
+	public void reset() {
+		bod.clear();
+		currentTime = 0.0;
+	}
+	/**
+	 * Establece el Delta Time a un valor especifico pasado por parametro. Si no es valido, se lanzara un IllegalArgumentException
+	 * @author Camilo Andres D'isidoro y Jose Ignacio Barrios Oros
+	 * @param dt Tiempo delta que va a cargarse
+	 * @throws IllegalArgumentException Si el tiempo delta tiene un valor no valido, se lanzara la excepcion
+	 */
+	public void setDeltaTime(double dt) throws IllegalArgumentException{
+		try {
+			timePerStep = dt;
+		}catch(IllegalArgumentException ex){
+			System.out.println("El valor " + dt + "es invalido");
+		}
+	}
+	/**
+	 * Establece la Ley de fuerza que utilizará el simulador. Si es nula, se lanzara un IllegalArgumentException
+	 * @author Camilo Andres D'isidoro y Jose Ignacio Barrios Oros
+	 * @param forceLaws La ley de fuerza que se va a implementar
+	 * @throws IllegalArgumentException Si la Ley de fuerza es nula se manda un IllegalArgumentException
+	 */
+	public void setForceLaws(ForceLaws forceLaws) throws IllegalArgumentException{
+		if(forceLaws == null) {
+			throw new IllegalArgumentException("La ley de fuerza no puede ser nula!");
+		}else {
+			law = forceLaws;
+		}
 	}
 }
