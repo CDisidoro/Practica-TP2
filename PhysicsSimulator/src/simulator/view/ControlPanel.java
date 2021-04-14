@@ -11,6 +11,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JSpinner;
 import javax.swing.JTextField;
@@ -108,6 +109,12 @@ public class ControlPanel extends JPanel implements SimulatorObserver{
 				_ctrl.run(1);
 			}catch(Exception e) {
 				//TODO Mostrar error en una ventana JOptionPane y poner a enable todos los botones
+				JPanel error=new JPanel();
+				JOptionPane.showMessageDialog(error, "Error en la simulacion","ERROR",JOptionPane.ERROR_MESSAGE);
+				chooseFileButton.setEnabled(true);
+				chooseForceButton.setEnabled(true);
+				startButton.setEnabled(true);
+				exitButton.setEnabled(true);
 				_stopped = true;
 				return;
 			}
