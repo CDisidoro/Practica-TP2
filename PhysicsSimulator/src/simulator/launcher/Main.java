@@ -5,6 +5,9 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.util.ArrayList;
+
+import javax.swing.SwingUtilities;
+
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.DefaultParser;
@@ -28,6 +31,7 @@ import simulator.factories.NoForceBuilder;
 import simulator.model.Body;
 import simulator.model.ForceLaws;
 import simulator.model.PhysicsSimulator;
+import simulator.view.MainWindow;
 
 /**
  * Clase Principal del Simulador Fisico 2D
@@ -41,6 +45,7 @@ public class Main {
 	private final static String _forceLawsDefaultValue = "nlug";
 	private final static String _stateComparatorDefaultValue = "epseq";
 	private final static Integer _stepsDefaultValue = 150;
+	private final static String _modeDefaultValue = "batch";
 
 	// Algunos atributos para almacenar valores correspondientes a los parametros de
 	// la linea de comandos
@@ -51,7 +56,8 @@ public class Main {
 	private static JSONObject _forceLawsInfo = null;
 	private static JSONObject _stateComparatorInfo = null;
 	private static Integer _steps = null;
-
+	private static String _mode = null;
+	
 	// Factorias
 	private static Factory<Body> _bodyFactory;
 	private static Factory<ForceLaws> _forceLawsFactory;
@@ -99,6 +105,7 @@ public class Main {
 			CommandLine line = parser.parse(cmdLineOptions, args);
 
 			parseHelpOption(line, cmdLineOptions);
+			parseModeOption(line); // m
 			parseInFileOption(line);
 			parseStepsOption(line); // s
 			parseOutFileOption(line); // o
@@ -139,6 +146,11 @@ public class Main {
 		// Archivo de Entrada
 		cmdLineOptions.addOption(Option.builder("i").longOpt("input").hasArg().desc("Bodies JSON input file.").build());
 
+		// Modo de Ejecucion
+		cmdLineOptions.addOption(Option.builder("m").longOpt("mode").hasArg()
+				.desc("Execution Mode. Possible values: 'batch' (Batch Mode), 'gui' (Graphical User Interface Mode)."
+						+ "Default Mode: " + _modeDefaultValue).build());
+		
 		// Salida Esperada
 		cmdLineOptions.addOption(Option.builder("eo").longOpt("expected-output").hasArg()
 				.desc("The expected output file. If not provided no comparison is applied").build());
@@ -174,6 +186,7 @@ public class Main {
 		return cmdLineOptions;
 	}
 
+	
 	/**
 	 * Detecta los posibles valores para una Factoria
 	 * 
@@ -200,6 +213,7 @@ public class Main {
 		return s;
 	}
 
+	
 	/**
 	 * Parseo de la Opcion de Ayuda
 	 * 
@@ -226,7 +240,7 @@ public class Main {
 	 */
 	private static void parseInFileOption(CommandLine line) throws ParseException {
 		_inFile = line.getOptionValue("i");
-		if (_inFile == null) {
+		if (_inFile == null && _mode == _modeDefaultValue) {
 			throw new ParseException("In batch mode an input file of bodies is required");
 		}
 	}
@@ -241,7 +255,13 @@ public class Main {
 	private static void parseOutFileOption(CommandLine line) {
 		_outFile = line.getOptionValue("o");
 	}
-
+	/**
+	 * Parseo de la Opcion del modo de ejecucion
+	 * @param line La linea de argumentos adicionales enviada al iniciar el simulador
+	 */
+	private static void parseModeOption(CommandLine line) {
+		_mode = line.getOptionValue("m", _modeDefaultValue);
+	}
 	/**
 	 * Parseo de la Opcion de Archivo de Salida Esperada
 	 * 
@@ -407,6 +427,27 @@ public class Main {
 	}
 
 	/**
+	 * Iniciador del simulador en modo GUI
+	 * @throws Exception Si algo va mal durante la simulacion lanzara una excepcion
+	 */
+	private static void startGUIMode() throws Exception{
+		//TODO Completar el metodo
+		PhysicsSimulator simulador = new PhysicsSimulator(_forceLawsFactory.createInstance(_forceLawsInfo), _dtime);
+		InputStream inFile = null;
+		Controller controlador = new Controller(simulador, _bodyFactory);
+		if(_inFile != null) {
+			inFile = new FileInputStream(new File(_inFile));
+			controlador.localBodies(inFile);
+		}
+		SwingUtilities.invokeAndWait(new Runnable() {
+			@Override
+			public void run() {
+				new MainWindow(controlador);
+			}
+		});
+	}
+	
+	/**
 	 * Funcion de inicio del simulador que llama al parseo de los argumentos pasados
 	 * e inicia el modo Batch
 	 * 
@@ -417,7 +458,11 @@ public class Main {
 	 */
 	private static void start(String[] args) throws Exception {
 		parseArgs(args);
-		startBatchMode();
+		if(_mode == "batch") {
+			startBatchMode();
+		}else if(_mode == "gui") {
+			startGUIMode();
+		}
 	}
 
 	/**
