@@ -14,6 +14,8 @@ public class PhysicsSimulator {
 	protected ForceLaws law;
 	protected double timePerStep, currentTime;
 	protected List<Body> bod;
+	//ATRIBUTOS PARTE 2
+	protected List<SimulatorObserver> observers;
 	/**
 	 * Constructor del simulador fisico
 	 * @param law Ley Fisica que se va a implementar
@@ -25,6 +27,7 @@ public class PhysicsSimulator {
 		setDeltaTime(timePerStep);
 		bod = new ArrayList<Body>();
 		reset();
+		observers = new ArrayList<SimulatorObserver>();
 	}
 	/**
 	 * Añade un cuerpo nuevo a la simulacion, en caso de ya existir el cuerpo se lanza un IllegalArgumentException
@@ -34,6 +37,11 @@ public class PhysicsSimulator {
 		if(bod.contains(newBody))
 			throw new IllegalArgumentException("El cuerpo que se ha intentado añadir ya existe");
 		bod.add(newBody);
+		//Notifica que se ha cargado un nuevo cuerpo a todos los observadores
+		Iterator<SimulatorObserver> iter = observers.iterator();
+		while(iter.hasNext()) {
+			iter.next().onBodyAdded(bod, newBody);
+		}
 	}
 	/**
 	 * Se avanza un paso en la simulación
@@ -58,6 +66,11 @@ public class PhysicsSimulator {
 		}
 		//Se incrementa el tiempo actual con el tiempo que dura cada paso
 		currentTime = currentTime + timePerStep;
+		//Se notifica a todos los observadores que se ha avanzado en la simulacion
+		Iterator<SimulatorObserver> iter = observers.iterator();
+		while(iter.hasNext()) {
+			iter.next().onAdvance(bod, currentTime);
+		}
 	}
 	/**
 	 * Obtiene el estado actual de la simulacion
@@ -92,6 +105,11 @@ public class PhysicsSimulator {
 	public void reset() {
 		bod.clear();
 		currentTime = 0.0;
+		//Notifica el reset a todos los observadores registrados
+		Iterator<SimulatorObserver> iter = observers.iterator();
+		while(iter.hasNext()) {
+			iter.next().onReset(bod, currentTime, timePerStep, law.toString());
+		}
 	}
 	/**
 	 * Establece el Delta Time a un valor especifico pasado por parametro. Si no es valido, se lanzara un IllegalArgumentException
@@ -104,6 +122,11 @@ public class PhysicsSimulator {
 			timePerStep = dt;
 		}catch(IllegalArgumentException ex){
 			System.out.println("El valor " + dt + "es invalido");
+		}
+		//Se notifica a todos los observadores que el Delta Time ha cambiado
+		Iterator<SimulatorObserver> iter = observers.iterator();
+		while(iter.hasNext()) {
+			iter.next().onDeltaTimeChanged(timePerStep);
 		}
 	}
 	/**
@@ -118,5 +141,21 @@ public class PhysicsSimulator {
 		}else {
 			law = forceLaws;
 		}
+		//Se notifica a todos los observadores que la Ley de Fuerza ha cambiado
+		Iterator<SimulatorObserver> iter = observers.iterator();
+		while(iter.hasNext()) {
+			iter.next().onForceLawsChanged(law.toString());
+		}
+	}
+	/**
+	 * Agrega un nuevo observador a la simulacion
+	 * @param o Nuevo observador de la simulacion
+	 */
+	public void addObserver(SimulatorObserver o) {
+		if(!observers.contains(o)) {
+			observers.add(o);
+		}
+		//Notifica el registro del observador al observador agregado
+		o.onRegister(bod, currentTime, timePerStep, law.toString());
 	}
 }
