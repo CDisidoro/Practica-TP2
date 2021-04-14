@@ -434,7 +434,7 @@ public class Main {
 		//TODO Completar el metodo
 		PhysicsSimulator simulador = new PhysicsSimulator(_forceLawsFactory.createInstance(_forceLawsInfo), _dtime);
 		InputStream inFile = null;
-		Controller controlador = new Controller(simulador, _bodyFactory);
+		Controller controlador = new Controller(simulador, _bodyFactory, _forceLawsFactory);
 		if(_inFile != null) {
 			inFile = new FileInputStream(new File(_inFile));
 			controlador.localBodies(inFile);

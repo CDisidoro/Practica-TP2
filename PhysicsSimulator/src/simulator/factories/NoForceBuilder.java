@@ -16,7 +16,7 @@ public class NoForceBuilder extends Builder<ForceLaws>{
 	 */
 	public NoForceBuilder() {
 		this.typeTag="ng"; //Deberia ser nf
-		this.desc="Sin Fuerza";
+		this.desc="No Force";
 	}
 	@Override
 	/**
