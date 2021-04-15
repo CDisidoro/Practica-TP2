@@ -23,10 +23,16 @@ public class PhysicsSimulator {
 	 * @throws IllegalArgumentException Si hay algun argumento erroneo se lanza una IllegalArgumentException
 	 */
 	public PhysicsSimulator(ForceLaws law, double timePerStep) throws IllegalArgumentException{
-		setForceLaws(law);
-		setDeltaTime(timePerStep);
+		//setForceLaws(law);
+		//setDeltaTime(timePerStep);
 		bod = new ArrayList<Body>();
-		reset();
+		//reset();
+		//Temporal
+		this.law = law;
+		this.timePerStep = timePerStep;
+		bod.clear();
+		currentTime = 0.0;
+		//Fin Temporal
 		observers = new ArrayList<SimulatorObserver>();
 	}
 	/**

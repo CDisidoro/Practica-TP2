@@ -458,9 +458,9 @@ public class Main {
 	 */
 	private static void start(String[] args) throws Exception {
 		parseArgs(args);
-		if(_mode == "batch") {
+		if(_mode.equals("batch")) {
 			startBatchMode();
-		}else if(_mode == "gui") {
+		}else if(_mode.equals("gui")) {
 			startGUIMode();
 		}
 	}

@@ -1,5 +1,7 @@
 package simulator.view;
 
+import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -16,6 +18,7 @@ import javax.swing.JPanel;
 import javax.swing.JSpinner;
 import javax.swing.JTextField;
 import javax.swing.JToolBar;
+import javax.swing.SpinnerNumberModel;
 import javax.swing.SwingUtilities;
 import simulator.control.Controller;
 import simulator.model.Body;
@@ -31,7 +34,6 @@ public class ControlPanel extends JPanel implements SimulatorObserver{
 	private JButton chooseFileButton,chooseForceButton,startButton,stopButton,exitButton;
 	private JSpinner stepsSpinner;
 	private JFileChooser fileChooser;
-	private JLabel stepsLabel, deltaTimeLabel;
 	private JTextField deltaTimeField;
 	public ControlPanel(Controller ctrl) {
 		_ctrl = ctrl;
@@ -43,6 +45,7 @@ public class ControlPanel extends JPanel implements SimulatorObserver{
 	private void initGUI() {
 		//TODO Construir la tool bar
 		tools = new JToolBar();
+		tools.setLayout(new FlowLayout(0));
 		//Configuracion del Boton de Elegir Archivo
 		chooseFileButton = new JButton();
 		chooseFileButton.setIcon(loadImage("resources/icons/open.png"));
@@ -101,6 +104,29 @@ public class ControlPanel extends JPanel implements SimulatorObserver{
 				// TODO Darle accion al boton
 			}
 		});
+		//Configuracion del Spinner de Steps
+		stepsSpinner = new JSpinner(new SpinnerNumberModel(150, 0, null, 1));
+		stepsSpinner.setPreferredSize(new Dimension(80, 20));
+		stepsSpinner.setMaximumSize(new Dimension(80, 40));
+		//Configuracion del Text Field de Delta Time
+		deltaTimeField = new JTextField();
+		deltaTimeField.setPreferredSize(new Dimension(80, 20));
+		deltaTimeField.setMaximumSize(new Dimension(80, 40));
+		//Agregado de los Componentes
+		tools.add(chooseFileButton);
+		tools.addSeparator();
+		tools.add(chooseForceButton);
+		tools.addSeparator();
+		tools.add(startButton);
+		tools.add(stopButton);
+		tools.add(new JLabel("Steps: "));
+		tools.add(stepsSpinner);
+		tools.add(new JLabel("Delta-Time: "));
+		tools.add(deltaTimeField);
+		tools.addSeparator();
+		tools.add(exitButton);
+		tools.setPreferredSize(new Dimension(800, 60));
+		this.add(tools);
 	}
 	//Metodos privados/protegidos
 	private void run_sim(int n) {
