@@ -1,5 +1,6 @@
 package simulator.view;
 
+import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Toolkit;
@@ -81,7 +82,14 @@ public class ControlPanel extends JPanel implements SimulatorObserver{
 		startButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				// TODO Darle accion al boton
+				chooseFileButton.setEnabled(false);
+				chooseForceButton.setEnabled(false);
+				startButton.setEnabled(false);
+				exitButton.setEnabled(false);
+				stepsSpinner.setEnabled(false);
+				deltaTimeField.setEditable(false);
+				_stopped = false;
+				run_sim(Integer.parseInt(stepsSpinner.getValue().toString()));
 			}
 		});
 		//Configuracion del Boton de Parar
@@ -91,7 +99,13 @@ public class ControlPanel extends JPanel implements SimulatorObserver{
 		stopButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				// TODO Darle accion al boton
+				chooseFileButton.setEnabled(true);
+				chooseForceButton.setEnabled(true);
+				startButton.setEnabled(true);
+				exitButton.setEnabled(true);
+				stepsSpinner.setEnabled(true);
+				deltaTimeField.setEditable(true);
+				_stopped = true;
 			}
 		});
 		//Configuracion del Boton de Salir
@@ -102,15 +116,20 @@ public class ControlPanel extends JPanel implements SimulatorObserver{
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Darle accion al boton
+				JPanel salir = new JPanel();
+				int opc = JOptionPane.showConfirmDialog(salir, "Desea salir del simulador?", "Salir", 0);
+				if(opc == 0) {//Se pulsa que si
+					System.exit(0);
+				}
 			}
 		});
 		//Configuracion del Spinner de Steps
 		stepsSpinner = new JSpinner(new SpinnerNumberModel(150, 0, null, 1));
-		stepsSpinner.setPreferredSize(new Dimension(80, 20));
+		stepsSpinner.setPreferredSize(new Dimension(80, 40));
 		stepsSpinner.setMaximumSize(new Dimension(80, 40));
 		//Configuracion del Text Field de Delta Time
 		deltaTimeField = new JTextField();
-		deltaTimeField.setPreferredSize(new Dimension(80, 20));
+		deltaTimeField.setPreferredSize(new Dimension(80, 40));
 		deltaTimeField.setMaximumSize(new Dimension(80, 40));
 		//Agregado de los Componentes
 		tools.add(chooseFileButton);
@@ -144,12 +163,12 @@ public class ControlPanel extends JPanel implements SimulatorObserver{
 					chooseForceButton.setEnabled(true);
 					startButton.setEnabled(true);
 					exitButton.setEnabled(true);
+					stepsSpinner.setEnabled(true);
+					deltaTimeField.setEditable(true);
 					_stopped = true;
-					return;}
+					return;
+					}
 				});
-					
-				
-				
 			}
 			SwingUtilities.invokeLater(new Runnable() {
 				@Override
@@ -159,7 +178,12 @@ public class ControlPanel extends JPanel implements SimulatorObserver{
 			});
 		}else {
 			_stopped = true;
-			//TODO poner a enable todos los botones
+			chooseFileButton.setEnabled(true);
+			chooseForceButton.setEnabled(true);
+			startButton.setEnabled(true);
+			exitButton.setEnabled(true);
+			stepsSpinner.setEnabled(true);
+			deltaTimeField.setEditable(true);
 		}
 	}
 	protected ImageIcon loadImage(String path) {

@@ -23,17 +23,11 @@ public class PhysicsSimulator {
 	 * @throws IllegalArgumentException Si hay algun argumento erroneo se lanza una IllegalArgumentException
 	 */
 	public PhysicsSimulator(ForceLaws law, double timePerStep) throws IllegalArgumentException{
-		//setForceLaws(law);
-		//setDeltaTime(timePerStep);
-		bod = new ArrayList<Body>();
-		//reset();
-		//Temporal
-		this.law = law;
-		this.timePerStep = timePerStep;
-		bod.clear();
-		currentTime = 0.0;
-		//Fin Temporal
 		observers = new ArrayList<SimulatorObserver>();
+		bod = new ArrayList<Body>();
+		setForceLaws(law);
+		setDeltaTime(timePerStep);
+		reset();
 	}
 	/**
 	 * Añade un cuerpo nuevo a la simulacion, en caso de ya existir el cuerpo se lanza un IllegalArgumentException
