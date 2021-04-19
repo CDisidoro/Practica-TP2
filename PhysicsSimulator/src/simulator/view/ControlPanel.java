@@ -149,7 +149,7 @@ public class ControlPanel extends JPanel implements SimulatorObserver{
 		tools.add(deltaTimeField);
 		tools.add(Box.createHorizontalGlue());
 		tools.add(exitButton);
-		tools.setPreferredSize(new Dimension(800, 60));
+		tools.setPreferredSize(new Dimension(980, 60));
 		this.add(tools);
 	}
 	//Metodos privados/protegidos

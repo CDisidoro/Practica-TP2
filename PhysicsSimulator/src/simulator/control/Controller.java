@@ -133,10 +133,9 @@ public class Controller {
 	 */
 	public void run(int n) {
 		//Ejecuta la simulacion n pasos, haciendo un advance por cada paso sin imprimir nada
-		simulador.setForceLaws(new NewtonUniversalGravitation(6.67E-11)); //TODO REMOVER ESTO CUANDO SE TENGA EL VIEWER
+		simulador.setForceLaws(new NewtonUniversalGravitation(6.67E-11)); //TODO REMOVER ESTO CUANDO SE TENGA EL SELECTOR DE LEY FISICA
 		for(int i = 0; i < n; i++) {
 			simulador.advance();
-			System.out.println(simulador.getState()); //TODO REMOVER ESTO CUANDO SE TENGA EL VIEWER
 		}
 	}
 	/**

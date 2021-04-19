@@ -5,6 +5,8 @@ import java.awt.Dimension;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.border.Border;
+
 import simulator.control.Controller;
 
 @SuppressWarnings("serial")
@@ -30,10 +32,12 @@ public class MainWindow extends JFrame{
 	private void initGUI() {
 		JPanel mainPanel = new JPanel(new BorderLayout());
 		this.setContentPane(mainPanel);
-		this.setPreferredSize(new Dimension(825,600));
+		this.setPreferredSize(new Dimension(1000,700));
 		setLocationByPlatform(true);
 		//TODO Completar la construccion de GUI
-		mainPanel.add(new ControlPanel(ctrl));
+		mainPanel.add(new ControlPanel(ctrl), BorderLayout.NORTH);
+		mainPanel.add(new BodiesTable (ctrl), BorderLayout.CENTER);
+		mainPanel.add(new Viewer(ctrl), BorderLayout.SOUTH);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.pack();
 		this.setVisible(true);
