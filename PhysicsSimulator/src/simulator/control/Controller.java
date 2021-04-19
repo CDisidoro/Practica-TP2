@@ -13,6 +13,7 @@ import simulator.factories.Factory;
 import simulator.misc.NotEqualStateException;
 import simulator.model.Body;
 import simulator.model.ForceLaws;
+import simulator.model.NewtonUniversalGravitation;
 import simulator.model.PhysicsSimulator;
 import simulator.model.SimulatorObserver;
 /**
@@ -132,8 +133,10 @@ public class Controller {
 	 */
 	public void run(int n) {
 		//Ejecuta la simulacion n pasos, haciendo un advance por cada paso sin imprimir nada
+		simulador.setForceLaws(new NewtonUniversalGravitation(6.67E-11)); //TODO REMOVER ESTO CUANDO SE TENGA EL VIEWER
 		for(int i = 0; i < n; i++) {
 			simulador.advance();
+			System.out.println(simulador.getState()); //TODO REMOVER ESTO CUANDO SE TENGA EL VIEWER
 		}
 	}
 	/**

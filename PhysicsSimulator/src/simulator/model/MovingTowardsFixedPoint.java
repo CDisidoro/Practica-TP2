@@ -46,7 +46,7 @@ public class MovingTowardsFixedPoint implements ForceLaws{
 	 * @return Retorna la informacion relacionada con la Ley en formato String
 	 */
 	public String toString() {
-		return "Movimiento al punto " + vector.toString() + " con aceleracion constante -" + g;
+		return "Moving towards " + vector.toString() + " with constant acceleration -" + g;
 	}
 	
 }

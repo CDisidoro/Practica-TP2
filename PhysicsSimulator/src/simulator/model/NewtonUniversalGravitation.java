@@ -60,6 +60,6 @@ public class NewtonUniversalGravitation implements ForceLaws{
 	 * @return Descripcion actual de la Ley de Newton en formato String
 	 */
 	public String toString() {
-		return "Ley de Gravitacion Universal de Newton con fuerza G= -" + g;
+		return "Newton's Universal Gravitation with G= -" + g;
 	}
 }

@@ -24,6 +24,6 @@ public class NoForce implements ForceLaws{
 	 * @return Una descripcion breve de la Ley
 	 */
 	public String toString() {
-		return "Ley Sin Fuerza";
+		return "No Force";
 	}
 }

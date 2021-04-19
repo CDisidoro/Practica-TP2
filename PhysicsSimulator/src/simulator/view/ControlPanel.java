@@ -1,15 +1,14 @@
 package simulator.view;
 
-import java.awt.BorderLayout;
 import java.awt.Dimension;
-import java.awt.FlowLayout;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.util.List;
-
+import javax.swing.Box;
+import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
@@ -26,27 +25,39 @@ import simulator.model.Body;
 import simulator.model.SimulatorObserver;
 
 @SuppressWarnings("serial")
+/**
+ * Panel de Control del Simulador Fisico, donde estan los botones esenciales para su funcionamiento
+ * @author Camilo Andres D'isidoro y Jose Ignacio Barrios Oros
+ * @see JPanel
+ */
 public class ControlPanel extends JPanel implements SimulatorObserver{
 
 	private Controller _ctrl;
 	private boolean _stopped;
-	//TODO Agregar atributos de JToolBar, botones, JSpinner, JFileChooser, etc.
 	private JToolBar tools;
 	private JButton chooseFileButton,chooseForceButton,startButton,stopButton,exitButton;
 	private JSpinner stepsSpinner;
 	private JFileChooser fileChooser;
 	private JTextField deltaTimeField;
+	/**
+	 * Constructor del Panel de control que llama a initGUI y añade al controlador como un observador
+	 * @param ctrl Controlador del Simulador Fisico
+	 */
 	public ControlPanel(Controller ctrl) {
 		_ctrl = ctrl;
 		_stopped = true;
 		initGUI();
 		_ctrl.addObserver(this);
 	}
-	
+	/**
+	 * Inicializa el panel de botones del panel de control
+	 */
 	private void initGUI() {
-		//TODO Construir la tool bar
 		tools = new JToolBar();
-		tools.setLayout(new FlowLayout(0));
+		tools.setLayout(new BoxLayout(tools, BoxLayout.LINE_AXIS));
+		tools.setFloatable(false);
+		//Creacion del File Chooser
+		fileChooser = new JFileChooser("Selecciona un archivo JSON");
 		//Configuracion del Boton de Elegir Archivo
 		chooseFileButton = new JButton();
 		chooseFileButton.setIcon(loadImage("resources/icons/open.png"));
@@ -54,14 +65,15 @@ public class ControlPanel extends JPanel implements SimulatorObserver{
 		chooseFileButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				fileChooser = new JFileChooser("Selecciona un archivo JSON");
-				fileChooser.showOpenDialog(fileChooser);
-				String archivo = fileChooser.getSelectedFile().getAbsolutePath();
-				_ctrl.reset();
-				try {
-					_ctrl.localBodies(new FileInputStream(archivo));
-				} catch (FileNotFoundException e1) {
-					e1.printStackTrace();
+				int respuesta = fileChooser.showOpenDialog(fileChooser);
+				if(respuesta == JFileChooser.APPROVE_OPTION) {
+					String archivo = fileChooser.getSelectedFile().getAbsolutePath();
+					_ctrl.reset();
+					try {
+						_ctrl.localBodies(new FileInputStream(archivo));
+					} catch (FileNotFoundException e1) {
+						e1.printStackTrace();
+					}
 				}
 			}
 		});
@@ -82,13 +94,12 @@ public class ControlPanel extends JPanel implements SimulatorObserver{
 		startButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				chooseFileButton.setEnabled(false);
-				chooseForceButton.setEnabled(false);
-				startButton.setEnabled(false);
-				exitButton.setEnabled(false);
-				stepsSpinner.setEnabled(false);
-				deltaTimeField.setEditable(false);
-				_stopped = false;
+				setStatus(false);
+				try {
+					_ctrl.setDeltaTime(Double.parseDouble(deltaTimeField.getText()));
+				}catch(Exception ex) {
+					JOptionPane.showMessageDialog(null, "Error en el parseo de Delta Time","ERROR",JOptionPane.ERROR_MESSAGE);
+				}
 				run_sim(Integer.parseInt(stepsSpinner.getValue().toString()));
 			}
 		});
@@ -99,13 +110,7 @@ public class ControlPanel extends JPanel implements SimulatorObserver{
 		stopButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				chooseFileButton.setEnabled(true);
-				chooseForceButton.setEnabled(true);
-				startButton.setEnabled(true);
-				exitButton.setEnabled(true);
-				stepsSpinner.setEnabled(true);
-				deltaTimeField.setEditable(true);
-				_stopped = true;
+				setStatus(true);
 			}
 		});
 		//Configuracion del Boton de Salir
@@ -115,7 +120,6 @@ public class ControlPanel extends JPanel implements SimulatorObserver{
 		exitButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				// TODO Darle accion al boton
 				JPanel salir = new JPanel();
 				int opc = JOptionPane.showConfirmDialog(salir, "Desea salir del simulador?", "Salir", 0);
 				if(opc == 0) {//Se pulsa que si
@@ -124,7 +128,7 @@ public class ControlPanel extends JPanel implements SimulatorObserver{
 			}
 		});
 		//Configuracion del Spinner de Steps
-		stepsSpinner = new JSpinner(new SpinnerNumberModel(150, 0, null, 1));
+		stepsSpinner = new JSpinner(new SpinnerNumberModel(150, 0, null, 500));
 		stepsSpinner.setPreferredSize(new Dimension(80, 40));
 		stepsSpinner.setMaximumSize(new Dimension(80, 40));
 		//Configuracion del Text Field de Delta Time
@@ -140,32 +144,30 @@ public class ControlPanel extends JPanel implements SimulatorObserver{
 		tools.add(stopButton);
 		tools.add(new JLabel("Steps: "));
 		tools.add(stepsSpinner);
+		tools.addSeparator();
 		tools.add(new JLabel("Delta-Time: "));
 		tools.add(deltaTimeField);
-		tools.addSeparator();
+		tools.add(Box.createHorizontalGlue());
 		tools.add(exitButton);
 		tools.setPreferredSize(new Dimension(800, 60));
 		this.add(tools);
 	}
 	//Metodos privados/protegidos
+	/**
+	 * Ejecuta la simulacion un numero determinado de pasos
+	 * @param n Numero de pasos a ejecutar en la simulacion
+	 */
 	private void run_sim(int n) {
 		if (n > 0 && !_stopped) {
 			try {
 				_ctrl.run(1);
 			}catch(Exception e) {
-				//TODO Mostrar error en una ventana JOptionPane y poner a enable todos los botones
 				SwingUtilities.invokeLater(new Runnable() {
 					@Override
 					public void run() {
 					JPanel error=new JPanel();
 					JOptionPane.showMessageDialog(error, "Error en la simulacion","ERROR",JOptionPane.ERROR_MESSAGE);
-					chooseFileButton.setEnabled(true);
-					chooseForceButton.setEnabled(true);
-					startButton.setEnabled(true);
-					exitButton.setEnabled(true);
-					stepsSpinner.setEnabled(true);
-					deltaTimeField.setEditable(true);
-					_stopped = true;
+					setStatus(true);
 					return;
 					}
 				});
@@ -177,48 +179,63 @@ public class ControlPanel extends JPanel implements SimulatorObserver{
 				}
 			});
 		}else {
-			_stopped = true;
-			chooseFileButton.setEnabled(true);
-			chooseForceButton.setEnabled(true);
-			startButton.setEnabled(true);
-			exitButton.setEnabled(true);
-			stepsSpinner.setEnabled(true);
-			deltaTimeField.setEditable(true);
+			setStatus(true);
 		}
 	}
+	/**
+	 * Carga una imagen en un boton
+	 * @param path Ruta de la imagen que tendra el boton
+	 * @return Un nuevo objeto ImageIcon con la ruta de path
+	 */
 	protected ImageIcon loadImage(String path) {
 		return new ImageIcon(Toolkit.getDefaultToolkit().createImage(path));
+	}
+	/**
+	 * Cambia el estado de parada y de los botones segun la variable status
+	 * @param status Variable de estado para los botones, el estado de parada, el spinner y el campo de texto
+	 */
+	private void setStatus(boolean status) {
+		_stopped = status;
+		chooseFileButton.setEnabled(status);
+		chooseForceButton.setEnabled(status);
+		startButton.setEnabled(status);
+		exitButton.setEnabled(status);
+		stepsSpinner.setEnabled(status);
+		deltaTimeField.setEditable(status);
+	}
+	/**
+	 * Actualiza el texto dentro del campo delta time
+	 * @param dt Valor Delta Time del Simulador
+	 */
+	private void update(double dt) {
+		SwingUtilities.invokeLater(new Runnable() {
+			@Override
+			public void run() {
+				deltaTimeField.setText(""+dt);
+			}
+		});
 	}
 	//Metodos del Observador
 	@Override
 	public void onRegister(List<Body> bodies, double time, double dt, String fLawsDesc) {
-		// TODO Auto-generated method stub
-		
+		update(dt);
 	}
 	@Override
 	public void onReset(List<Body> bodies, double time, double dt, String fLawsDesc) {
-		// TODO Auto-generated method stub
-		
+		update(dt);
 	}
 	@Override
 	public void onBodyAdded(List<Body> bodies, Body b) {
-		// TODO Auto-generated method stub
-		
 	}
 	@Override
 	public void onAdvance(List<Body> bodies, double time) {
-		// TODO Auto-generated method stub
-		
 	}
 	@Override
 	public void onDeltaTimeChanged(double dt) {
-		// TODO Auto-generated method stub
-		
+		update(dt);
 	}
 	@Override
 	public void onForceLawsChanged(String fLawsDesc) {
-		// TODO Auto-generated method stub
-		
 	}
 
 }

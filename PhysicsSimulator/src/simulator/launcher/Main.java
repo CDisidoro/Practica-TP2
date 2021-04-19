@@ -431,7 +431,6 @@ public class Main {
 	 * @throws Exception Si algo va mal durante la simulacion lanzara una excepcion
 	 */
 	private static void startGUIMode() throws Exception{
-		//TODO Completar el metodo
 		PhysicsSimulator simulador = new PhysicsSimulator(_forceLawsFactory.createInstance(_forceLawsInfo), _dtime);
 		InputStream inFile = null;
 		Controller controlador = new Controller(simulador, _bodyFactory, _forceLawsFactory);
