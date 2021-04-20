@@ -3,6 +3,7 @@ package simulator.view;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 
+import javax.swing.BoxLayout;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.Border;
@@ -37,7 +38,8 @@ public class MainWindow extends JFrame{
 		//TODO Completar la construccion de GUI
 		mainPanel.add(new ControlPanel(ctrl), BorderLayout.NORTH);
 		mainPanel.add(new BodiesTable (ctrl), BorderLayout.CENTER);
-		mainPanel.add(new Viewer(ctrl), BorderLayout.SOUTH);
+		//mainPanel.add(new Viewer(ctrl), BorderLayout.SOUTH);
+		mainPanel.add(new StatusBar(ctrl), BorderLayout.SOUTH);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.pack();
 		this.setVisible(true);
