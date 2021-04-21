@@ -20,6 +20,9 @@ import javax.swing.JTextField;
 import javax.swing.JToolBar;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.SwingUtilities;
+import javax.swing.filechooser.FileFilter;
+import javax.swing.filechooser.FileNameExtensionFilter;
+
 import simulator.control.Controller;
 import simulator.model.Body;
 import simulator.model.SimulatorObserver;
@@ -58,6 +61,8 @@ public class ControlPanel extends JPanel implements SimulatorObserver{
 		tools.setFloatable(false);
 		//Creacion del File Chooser
 		fileChooser = new JFileChooser("Selecciona un archivo JSON");
+		FileNameExtensionFilter filtro = new FileNameExtensionFilter("JSON", "json");
+		fileChooser.setFileFilter(filtro);
 		//Configuracion del Boton de Elegir Archivo
 		chooseFileButton = new JButton();
 		chooseFileButton.setIcon(loadImage("resources/icons/open.png"));

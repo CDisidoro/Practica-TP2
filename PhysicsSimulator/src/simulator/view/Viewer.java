@@ -10,9 +10,13 @@ import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
+
+import javax.swing.BorderFactory;
 import javax.swing.JComponent;
 import javax.swing.SwingUtilities;
+import javax.swing.border.TitledBorder;
 
 import simulator.control.Controller;
 import simulator.misc.Vector2D;
@@ -21,8 +25,11 @@ import simulator.model.SimulatorObserver;
 
 @SuppressWarnings("serial")
 public class Viewer extends JComponent implements SimulatorObserver{
-	private static final int _WIDHT = 1000;
-	private static final int _HEIGHT = 1000;
+	private static final int _WIDHT = 800;
+	private static final int _HEIGHT = 600;
+	private Color azul = Color.cyan;
+	private Color rojo = Color.red;
+	private Color negro = Color.black;
 	private int _centerX;
 	private int _centerY;
 	private double _scale;
@@ -33,16 +40,19 @@ public class Viewer extends JComponent implements SimulatorObserver{
 	Viewer(Controller ctrl){
 		initGUI();
 		ctrl.addObserver(this);
-		this.setPreferredSize(new Dimension(800,600));
 	}
 	
 	
 	private void initGUI() {
+		this.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(negro, 2),
+						"Viewer",
+						TitledBorder.LEFT,
+						TitledBorder.TOP));
 		_bodies = new ArrayList<>();
 		_scale = 1.0;
 		_showHelp = true;
 		_showVectors = true;
-		//TODO Fijar tamaño con _HEIGHT y _WIDTH
+		this.setPreferredSize(new Dimension(_WIDHT,_HEIGHT));
 		//Creacion del Listener de teclas
 		addKeyListener(new KeyListener() {
 			@Override
@@ -100,6 +110,10 @@ public class Viewer extends JComponent implements SimulatorObserver{
 		repaint();
 	}
 	//METODOS PROPORCIONADOS
+	/**
+	 * Pinta los componentes del Viewer (Texto de ayuda, punto central, y cuerpos con sus vectores
+	 * @param g Elemento grafico que se encarga del dibujado
+	 */
 	protected void paintComponent(Graphics g) {
 		super.paintComponent(g);
 		Graphics2D gr = (Graphics2D) g;
@@ -107,7 +121,35 @@ public class Viewer extends JComponent implements SimulatorObserver{
 		gr.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
 		_centerX = getWidth() /2;
 		_centerY = getHeight()/2;
-		//TODO Dibujar la cruz en el centro, dibujar los bodies (con vectores si showVectors es true) y la ayuda (si showHelp es true)
+		//Dibujar una cruz en el centro
+		gr.setColor(rojo);
+		gr.drawLine(_centerX-10, _centerY, _centerX+10, _centerY);
+		gr.drawLine(_centerX, _centerY-10, _centerX, _centerY+10);
+		//Dibuja los bodies (Con vectores si showVectors es true)
+		Iterator<Body> iterBod = _bodies.iterator();
+		Body bod;
+		while(iterBod.hasNext()) {
+			bod = iterBod.next();
+			Vector2D vector = bod.getPosition();
+			gr.setColor(azul);
+			gr.fillOval(_centerX + (int) (vector.getX()/_scale), _centerY - (int) (vector.getY()/_scale), 5, 5);
+			if(_showVectors) {
+				drawLineWithArrow(gr,
+								_centerX + (int) (vector.getX()/_scale) + 5,
+								_centerY - (int) (vector.getY()/_scale) + 5,
+								_centerX + (int) (vector.getX()/_scale) + 15,
+								_centerY - (int) (vector.getY()/_scale) + 15,
+								3,
+								6,
+								rojo,
+								rojo);
+			}
+		}
+		//Dibuja help (Si showHelp es true)
+		gr.setColor(rojo);
+		if(_showHelp) {
+			gr.drawString("h: toggle help, v: toggle vectors, +: zoom-in, -:zoom-out, =:fit \n Scaling ratio: "+_scale, 10, 30);
+		}
 	}
 	/**
 	 * Realiza un auto escalado del viewer
