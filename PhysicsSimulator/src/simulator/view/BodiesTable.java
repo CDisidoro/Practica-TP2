@@ -2,6 +2,8 @@ package simulator.view;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Dimension;
+
 import javax.swing.BorderFactory;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -31,5 +33,6 @@ public class BodiesTable extends JPanel{
 		JScrollPane scroll = new JScrollPane();
 		scroll.setViewportView(table);
 		this.add(scroll);
+		this.setPreferredSize(new Dimension(800,300));
 	}
 }

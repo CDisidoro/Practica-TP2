@@ -32,17 +32,22 @@ public class MainWindow extends JFrame{
 	 */
 	private void initGUI() {
 		JPanel mainPanel = new JPanel(new BorderLayout());
+		//Layout en Caja para los componentes centrales
+		JPanel centro = new JPanel();
+		centro.setLayout(new BoxLayout(centro, BoxLayout.Y_AXIS));
 		this.setContentPane(mainPanel);
 		this.setPreferredSize(new Dimension(1000,700));
 		setLocationByPlatform(true);
 		//TODO Completar la construccion de GUI
 		mainPanel.add(new ControlPanel(ctrl), BorderLayout.NORTH);
-		mainPanel.add(new BodiesTable (ctrl), BorderLayout.CENTER);
-		//mainPanel.add(new Viewer(ctrl), BorderLayout.SOUTH);
+		//Agrega la tabla de cuerpos y el Viewer al BoxLayout
+		centro.add(new BodiesTable (ctrl));
+		centro.add(new JPanel().add(new Viewer(ctrl)));
+		//Se agrega el box layout al main Panel
+		mainPanel.add(centro, BorderLayout.CENTER);
 		mainPanel.add(new StatusBar(ctrl), BorderLayout.SOUTH);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.pack();
 		this.setVisible(true);
 	}
-	//TODO Agregar metodos private y protected
 }

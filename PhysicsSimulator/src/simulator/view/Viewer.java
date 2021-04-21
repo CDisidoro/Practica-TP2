@@ -1,6 +1,7 @@
 package simulator.view;
 
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
@@ -28,12 +29,15 @@ public class Viewer extends JComponent implements SimulatorObserver{
 	private List<Body> _bodies;
 	private boolean _showHelp;
 	private boolean _showVectors;
+	
 	Viewer(Controller ctrl){
 		initGUI();
 		ctrl.addObserver(this);
+		this.setPreferredSize(new Dimension(800,600));
 	}
+	
+	
 	private void initGUI() {
-		//TODO Sumar border con title
 		_bodies = new ArrayList<>();
 		_scale = 1.0;
 		_showHelp = true;

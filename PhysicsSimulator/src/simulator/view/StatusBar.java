@@ -14,59 +14,68 @@ import simulator.control.Controller;
 import simulator.model.Body;
 import simulator.model.SimulatorObserver;
 
+@SuppressWarnings("serial")
+/**
+ * Barra de Estados del Simulador Fisico
+ * @author Camilo Andres D'isidoro y Jose Ignacio Barrios Oros
+ * @see JPanel
+ * @see SimulatorObserver
+ */
 public class StatusBar extends JPanel implements SimulatorObserver{
 
-	private JLabel ctTime,nBodies,Laws;
-	
+	private JLabel _currTime,_numOfBodies,_currLaws;
+	/**
+	 * Constructor de la Barra de estados que recibe el controlador
+	 * @param ctrl Controlador del Simulador Fisico
+	 */
 	public StatusBar(Controller ctrl) {
-		// TODO Auto-generated constructor stub
 		initGUI();
 		ctrl.addObserver(this);
 		
 	}
-	
+	/**
+	 * Inicializacion de la barra de estados del Simulador Fisico
+	 */
 	private void initGUI() {
 		this.setLayout(new FlowLayout(FlowLayout.LEFT));
 		this.setBorder(BorderFactory.createBevelBorder(1));
 		
-		ctTime = new JLabel("");
-		nBodies = new JLabel("");
-		Laws = new JLabel("");
+		_currTime = new JLabel("");
+		_numOfBodies = new JLabel("");
+		_currLaws = new JLabel("");
 		
 		add(new JLabel("Time: "));
-		add(ctTime);
+		add(_currTime);
 		add(Box.createRigidArea(new Dimension(25, 0)));
 		
 		add(new JLabel("Bodies: "));
-		add(nBodies);
+		add(_numOfBodies);
 		add(Box.createRigidArea(new Dimension(25, 0)));
 		
 		add(new JLabel("Laws: "));
-		add(Laws);
+		add(_currLaws);
 	}
-	
+	//METODOS DEL OBSERVADOR
 	@Override
 	public void onRegister(List<Body> bodies, double time, double dt, String fLawsDesc) {
-		// TODO Auto-generated method stub
 		SwingUtilities.invokeLater(new Runnable() {
 			@Override
 			public void run() {
-				ctTime.setText(""+time);
-				nBodies.setText(""+bodies.size());
-				Laws.setText(fLawsDesc);
+				_currTime.setText(""+time);
+				_numOfBodies.setText(""+bodies.size());
+				_currLaws.setText(fLawsDesc);
 			}
 		});
 	}
 
 	@Override
 	public void onReset(List<Body> bodies, double time, double dt, String fLawsDesc) {
-		// TODO Auto-generated method stub
 		SwingUtilities.invokeLater(new Runnable() {
 			@Override
 			public void run() {
-				ctTime.setText(""+time);
-				nBodies.setText(""+bodies.size());
-				Laws.setText(fLawsDesc);
+				_currTime.setText(""+time);
+				_numOfBodies.setText(""+bodies.size());
+				_currLaws.setText(fLawsDesc);
 			}
 		});
 		
@@ -74,40 +83,35 @@ public class StatusBar extends JPanel implements SimulatorObserver{
 
 	@Override
 	public void onBodyAdded(List<Body> bodies, Body b) {
-		// TODO Auto-generated method stub
 		SwingUtilities.invokeLater(new Runnable() {
 			@Override
 			public void run() {
-				nBodies.setText(""+bodies.size());
+				_numOfBodies.setText(""+bodies.size());
 			}
 		});
 	}
 
 	@Override
 	public void onAdvance(List<Body> bodies, double time) {
-		// TODO Auto-generated method stub
 		SwingUtilities.invokeLater(new Runnable() {
 			@Override
 			public void run() {
-				ctTime.setText(""+time);
-				nBodies.setText(""+bodies.size());
+				_currTime.setText(""+time);
+				_numOfBodies.setText(""+bodies.size());
 			}
 		});
 	}
 
 	@Override
 	public void onDeltaTimeChanged(double dt) {
-		// TODO Auto-generated method stub
-		
 	}
 
 	@Override
 	public void onForceLawsChanged(String fLawsDesc) {
-		// TODO Auto-generated method stub
 		SwingUtilities.invokeLater(new Runnable() {
 			@Override
 			public void run() {
-				Laws.setText(fLawsDesc);
+				_currLaws.setText(fLawsDesc);
 			}
 		});
 	}
