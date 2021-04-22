@@ -39,7 +39,7 @@ public class MainWindow extends JFrame{
 		this.setPreferredSize(new Dimension(1000,700));
 		setLocationByPlatform(true);
 		//TODO Completar la construccion de GUI
-		mainPanel.add(new ControlPanel(ctrl), BorderLayout.NORTH);
+		mainPanel.add(new ControlPanel(ctrl, this), BorderLayout.NORTH);
 		//Agrega la tabla de cuerpos y el Viewer al BoxLayout
 		centro.add(new BodiesTable (ctrl));
 		centro.add(new JPanel().add(new Viewer(ctrl)));

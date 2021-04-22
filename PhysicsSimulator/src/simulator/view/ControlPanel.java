@@ -42,13 +42,16 @@ public class ControlPanel extends JPanel implements SimulatorObserver{
 	private JSpinner stepsSpinner;
 	private JFileChooser fileChooser;
 	private JTextField deltaTimeField;
+	private ForceLawDialog forceDialog;
+	private MainWindow mainWindow;
 	/**
 	 * Constructor del Panel de control que llama a initGUI y añade al controlador como un observador
 	 * @param ctrl Controlador del Simulador Fisico
 	 */
-	public ControlPanel(Controller ctrl) {
+	public ControlPanel(Controller ctrl, MainWindow mainWindow) {
 		_ctrl = ctrl;
 		_stopped = true;
+		this.mainWindow = mainWindow;
 		initGUI();
 		_ctrl.addObserver(this);
 	}
@@ -82,6 +85,8 @@ public class ControlPanel extends JPanel implements SimulatorObserver{
 				}
 			}
 		});
+		//Creacion del cuadro de dialogo de Ley Fisica
+		forceDialog = new ForceLawDialog(_ctrl, mainWindow);
 		//Configuracion del Boton de Elegir Ley de Fuerza
 		chooseForceButton = new JButton();
 		chooseForceButton.setIcon(loadImage("resources/icons/physics.png"));
@@ -90,6 +95,7 @@ public class ControlPanel extends JPanel implements SimulatorObserver{
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Darle accion al boton
+				forceDialog.open();
 			}
 		});
 		//Configuracion del Boton de Iniciar
