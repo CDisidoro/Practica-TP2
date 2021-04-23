@@ -1,11 +1,14 @@
 package simulator.view;
 
+import java.awt.BorderLayout;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Frame;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.List;
 
+import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.ComboBoxModel;
 import javax.swing.JButton;
@@ -13,6 +16,7 @@ import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JPopupMenu.Separator;
 
 import simulator.control.Controller;
 import simulator.model.Body;
@@ -34,29 +38,33 @@ public class ForceLawDialog extends JDialog implements SimulatorObserver{
 		initGUI();
 	}
 	public void initGUI() {
-		JPanel panel = new JPanel();
-		panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+		JPanel panel = new JPanel(new BorderLayout());
+		//panel.setLayout(new BoxLayout(panel, BoxLayout));
+		
 		//Creacion del texto superior
 		textoSuperior = new JLabel("Select a force law and provide values for the parametes in the Value column (default values are used for parametes with no value).");
 		textoSuperior.setAlignmentX(LEFT_ALIGNMENT);
-		panel.add(textoSuperior);
+		panel.add(textoSuperior, BorderLayout.NORTH);
+		panel.add(Box.createRigidArea(new Dimension(0, 100)));
 		//Creacion de la tabla de datos
-		tablaParam = new ParametersTable();
-		panel.add(tablaParam);
+		tablaParam = new ParametersTable(ctrl);
+		panel.add(tablaParam, BorderLayout.CENTER);
+		
 		//Creacion de la zona del ComboBox
 		JPanel comboBoxPanel = new JPanel();
-		comboBoxPanel.setLayout(new BoxLayout(comboBoxPanel, BoxLayout.X_AXIS));
+		//comboBoxPanel.setLayout(new BoxLayout(comboBoxPanel, BoxLayout.X_AXIS));
 		textoComboBox = new JLabel("Force Law: ");
 		comboBoxPanel.add(textoComboBox);
 		leyComboBox = new JComboBox<String>();
 		for(int i=0 ; i < ctrl.getForceLawsInfo().size() ; i++) {
 			leyComboBox.addItem(ctrl.getForceLawsInfo().get(i).getString("desc"));
 		}
-		leyComboBox.setPreferredSize(new Dimension(50, 20));
+		leyComboBox.setPreferredSize(new Dimension(300, 20));
 		leyComboBox.setMaximumSize(new Dimension(800, 20));
 		comboBoxPanel.add(leyComboBox);
-		comboBoxPanel.setAlignmentX(CENTER_ALIGNMENT);
-		panel.add(comboBoxPanel);
+		//comboBoxPanel.setAlignmentX(CENTER_ALIGNMENT);
+		//panel.add(comboBoxPanel);
+		
 		//Creacion de la zona de botones
 		cancelar = new JButton("Cancel");
 		aceptar = new JButton("OK");
@@ -71,11 +79,24 @@ public class ForceLawDialog extends JDialog implements SimulatorObserver{
 			public void actionPerformed(ActionEvent e) {
 			}
 		});
+		
+		
+		
 		JPanel botonPanel = new JPanel();
-		botonPanel.setLayout(new BoxLayout(botonPanel, BoxLayout.X_AXIS));
+		//botonPanel.setLayout(new BoxLayout(botonPanel, BoxLayout.X_AXIS));
 		botonPanel.add(cancelar);
+		botonPanel.add(Box.createHorizontalStrut(20));
 		botonPanel.add(aceptar);
-		panel.add(botonPanel);
+		//panel.add(botonPanel);
+		
+		//Region Sur
+		Box boxcvertical=Box.createVerticalBox();
+		boxcvertical.add(comboBoxPanel);
+		boxcvertical.add(Box.createVerticalStrut(10));
+		boxcvertical.add(botonPanel);
+		boxcvertical.add(Box.createVerticalStrut(50));
+		panel.add(boxcvertical,BorderLayout.SOUTH);
+		
 		//Configuracion Final del Panel del JDialog
 		this.add(panel);
 		setPreferredSize(new Dimension(800,600));
