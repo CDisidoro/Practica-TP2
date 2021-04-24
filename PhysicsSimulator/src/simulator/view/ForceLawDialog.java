@@ -6,6 +6,8 @@ import java.awt.Dimension;
 import java.awt.Frame;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.util.List;
 
 import javax.swing.Box;
@@ -55,6 +57,13 @@ public class ForceLawDialog extends JDialog implements SimulatorObserver{
 		leyComboBox.setMaximumSize(new Dimension(800, 20));
 		//Creacion de la tabla de datos
 		tablaParam = new ParametersTable(ctrl,leyComboBox.getSelectedItem().toString());
+		//Escuchador del ComboBox cuando cambia de ley
+		leyComboBox.addItemListener(new ItemListener() {
+			@Override
+			public void itemStateChanged(ItemEvent e) {
+				tablaParam.refresh(leyComboBox.getSelectedItem().toString());
+			}
+		});
 		panel.add(tablaParam, BorderLayout.CENTER);
 		
 		//Creacion de la zona del ComboBox
@@ -78,6 +87,8 @@ public class ForceLawDialog extends JDialog implements SimulatorObserver{
 		aceptar.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				//ctrl.setForceLaws(tablaParam.getForceLaw());
+				dispose();
 			}
 		});
 		

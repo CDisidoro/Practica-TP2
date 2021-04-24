@@ -16,18 +16,18 @@ public class ParametersTableModel extends AbstractTableModel implements Simulato
 	private String[] column = {"Key", "Value", "Description"};
 	private String comboItem;
 	private Controller ctrl;
-	private String [] lawObj = {};
+	private JSONObject data;
+	private int currentLaw;
 	ParametersTableModel(Controller ctrl, String comboBoxItem){
 		comboItem = comboBoxItem;
-		initGUI();
 		this.ctrl = ctrl;
+		searchForceLaw();
 		ctrl.addObserver(this);
 	}
 	//METODOS DE ABSTRACTTABLEMODEL
 	@Override
 	public int getRowCount() {
-		// TODO Auto-generated method stub
-		return 0;
+		return data.length();
 	}
 	@Override
 	public int getColumnCount() {
@@ -35,8 +35,28 @@ public class ParametersTableModel extends AbstractTableModel implements Simulato
 	}
 	@Override
 	public Object getValueAt(int rowIndex, int columnIndex) {
-		// TODO Auto-generated method stub
-		return null;
+		String o = null;
+		switch(columnIndex) {
+		case 0:
+			if(data.names().length() > 0) {
+				o = data.names().get(rowIndex).toString();
+			}
+			break;
+		case 1:
+			break;
+		case 2:
+			if(currentLaw == 0) {
+				o = data.getString("G");
+			}else if(currentLaw == 1) {
+				if(rowIndex == 0) {
+					o = data.getString("c");
+				}else {
+					o = data.getString("g");
+				}
+			}
+			break;
+		}
+		return o;
 	}
 	@Override
 	public String getColumnName(int columna) {
@@ -45,33 +65,24 @@ public class ParametersTableModel extends AbstractTableModel implements Simulato
 	//METODOS DE OBSERVER
 	@Override
 	public void onRegister(List<Body> bodies, double time, double dt, String fLawsDesc) {
-		// TODO Auto-generated method stub
-		
+		update(fLawsDesc);
 	}
 	@Override
 	public void onReset(List<Body> bodies, double time, double dt, String fLawsDesc) {
-		// TODO Auto-generated method stub
-		
+		update(fLawsDesc);
 	}
 	@Override
 	public void onBodyAdded(List<Body> bodies, Body b) {
-		// TODO Auto-generated method stub
-		
 	}
 	@Override
 	public void onAdvance(List<Body> bodies, double time) {
-		// TODO Auto-generated method stub
-		
 	}
 	@Override
 	public void onDeltaTimeChanged(double dt) {
-		// TODO Auto-generated method stub
-		
 	}
 	@Override
 	public void onForceLawsChanged(String fLawsDesc) {
-		// TODO Auto-generated method stub
-		
+		update(fLawsDesc);
 	}
 	//METODOS PERSONALES
 	private void update(String fLawDesc) {
@@ -83,11 +94,26 @@ public class ParametersTableModel extends AbstractTableModel implements Simulato
 			}
 		});
 	}
-	private void initGUI() {
-		for(int i=0 ; i < ctrl.getForceLawsInfo().size() ; i++) {
+	protected void refresh(String comboBoxItem) {
+		comboItem = comboBoxItem;
+		searchForceLaw();
+		fireTableStructureChanged();
+	}
+	private void searchForceLaw() {
+		boolean found = false;
+		int i = 0;
+		while(!found && i < ctrl.getForceLawsInfo().size()) {
 			if(comboItem.equalsIgnoreCase(ctrl.getForceLawsInfo().get(i).getString("desc"))) {
-				lawObj[i] = ctrl.getForceLawsInfo().get(i).getString("data");
+				data = ctrl.getForceLawsInfo().get(i).getJSONObject("data");
+				currentLaw = i;
+				found = true;
 			}
+			i++;
 		}
+	}
+	protected JSONObject getLaw() {
+		JSONObject law = new JSONObject();
+		
+		return law;
 	}
 }
