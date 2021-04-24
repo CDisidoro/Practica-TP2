@@ -2,12 +2,9 @@ package simulator.view;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
-
 import javax.swing.BoxLayout;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
-import javax.swing.border.Border;
-
 import simulator.control.Controller;
 
 @SuppressWarnings("serial")
@@ -38,7 +35,6 @@ public class MainWindow extends JFrame{
 		this.setContentPane(mainPanel);
 		this.setPreferredSize(new Dimension(1000,700));
 		setLocationByPlatform(true);
-		//TODO Completar la construccion de GUI
 		mainPanel.add(new ControlPanel(ctrl, this), BorderLayout.NORTH);
 		//Agrega la tabla de cuerpos y el Viewer al BoxLayout
 		centro.add(new BodiesTable (ctrl));

@@ -46,8 +46,15 @@ public class ForceLawDialog extends JDialog implements SimulatorObserver{
 		textoSuperior.setAlignmentX(LEFT_ALIGNMENT);
 		panel.add(textoSuperior, BorderLayout.NORTH);
 		panel.add(Box.createRigidArea(new Dimension(0, 100)));
+		//Creacion ComboBox
+		leyComboBox = new JComboBox<String>();
+		for(int i=0 ; i < ctrl.getForceLawsInfo().size() ; i++) {
+			leyComboBox.addItem(ctrl.getForceLawsInfo().get(i).getString("desc"));
+		}
+		leyComboBox.setPreferredSize(new Dimension(300, 20));
+		leyComboBox.setMaximumSize(new Dimension(800, 20));
 		//Creacion de la tabla de datos
-		tablaParam = new ParametersTable(ctrl);
+		tablaParam = new ParametersTable(ctrl,leyComboBox.getSelectedItem().toString());
 		panel.add(tablaParam, BorderLayout.CENTER);
 		
 		//Creacion de la zona del ComboBox
@@ -55,12 +62,6 @@ public class ForceLawDialog extends JDialog implements SimulatorObserver{
 		//comboBoxPanel.setLayout(new BoxLayout(comboBoxPanel, BoxLayout.X_AXIS));
 		textoComboBox = new JLabel("Force Law: ");
 		comboBoxPanel.add(textoComboBox);
-		leyComboBox = new JComboBox<String>();
-		for(int i=0 ; i < ctrl.getForceLawsInfo().size() ; i++) {
-			leyComboBox.addItem(ctrl.getForceLawsInfo().get(i).getString("desc"));
-		}
-		leyComboBox.setPreferredSize(new Dimension(300, 20));
-		leyComboBox.setMaximumSize(new Dimension(800, 20));
 		comboBoxPanel.add(leyComboBox);
 		//comboBoxPanel.setAlignmentX(CENTER_ALIGNMENT);
 		//panel.add(comboBoxPanel);
