@@ -62,6 +62,14 @@ public class ParametersTableModel extends AbstractTableModel implements Simulato
 	public String getColumnName(int columna) {
 		return column[columna];
 	}
+	@Override
+	public boolean isCellEditable(int rowIndex, int columnIndex) {
+		if(columnIndex == 1) {
+			return true;
+		}else {
+			return false;
+		}
+	}
 	//METODOS DE OBSERVER
 	@Override
 	public void onRegister(List<Body> bodies, double time, double dt, String fLawsDesc) {
