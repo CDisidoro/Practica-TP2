@@ -4,16 +4,13 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.PrintStream;
 import java.util.List;
-
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.json.JSONTokener;
-
 import simulator.factories.Factory;
 import simulator.misc.NotEqualStateException;
 import simulator.model.Body;
 import simulator.model.ForceLaws;
-import simulator.model.NewtonUniversalGravitation;
 import simulator.model.PhysicsSimulator;
 import simulator.model.SimulatorObserver;
 /**
@@ -133,7 +130,6 @@ public class Controller {
 	 */
 	public void run(int n) {
 		//Ejecuta la simulacion n pasos, haciendo un advance por cada paso sin imprimir nada
-		simulador.setForceLaws(new NewtonUniversalGravitation(6.67E-11)); //TODO REMOVER ESTO CUANDO SE TENGA EL SELECTOR DE LEY FISICA
 		for(int i = 0; i < n; i++) {
 			simulador.advance();
 		}

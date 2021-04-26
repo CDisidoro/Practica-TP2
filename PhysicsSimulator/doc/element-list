@@ -3,3 +3,4 @@ simulator.factories
 simulator.launcher
 simulator.misc
 simulator.model
+simulator.view

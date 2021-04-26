@@ -43,6 +43,7 @@ public class ControlPanel extends JPanel implements SimulatorObserver{
 	private JTextField deltaTimeField;
 	private ForceLawDialog forceDialog;
 	private MainWindow mainWindow;
+	String archivo;
 	/**
 	 * Constructor del Panel de control que llama a initGUI y añade al controlador como un observador
 	 * @param ctrl Controlador del Simulador Fisico
@@ -74,13 +75,8 @@ public class ControlPanel extends JPanel implements SimulatorObserver{
 			public void actionPerformed(ActionEvent e) {
 				int respuesta = fileChooser.showOpenDialog(fileChooser);
 				if(respuesta == JFileChooser.APPROVE_OPTION) {
-					String archivo = fileChooser.getSelectedFile().getAbsolutePath();
-					_ctrl.reset();
-					try {
-						_ctrl.localBodies(new FileInputStream(archivo));
-					} catch (FileNotFoundException e1) {
-						e1.printStackTrace();
-					}
+					archivo = fileChooser.getSelectedFile().getAbsolutePath();
+					reload(archivo);
 				}
 			}
 		});
@@ -93,8 +89,12 @@ public class ControlPanel extends JPanel implements SimulatorObserver{
 		chooseForceButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				// TODO Darle accion al boton
-				forceDialog.open();
+				if(forceDialog.open() == 1) {
+					reload(archivo);
+					_ctrl.setForceLaws(forceDialog.getLaw());
+				}else {
+					System.out.println("Cambio de ley cancelada");
+				}
 			}
 		});
 		//Configuracion del Boton de Iniciar
@@ -163,6 +163,18 @@ public class ControlPanel extends JPanel implements SimulatorObserver{
 		this.add(tools);
 	}
 	//Metodos privados/protegidos
+	/**
+	 * Reinicia la posicion de los cuerpos y la simulacion
+	 * @param archivo Archivo de ruta del JSON que contiene la informacion de los cuerpos
+	 */
+	protected void reload(String archivo) {
+		_ctrl.reset();
+		try {
+			_ctrl.localBodies(new FileInputStream(archivo));
+		} catch (FileNotFoundException e1) {
+			e1.printStackTrace();
+		}
+	}
 	/**
 	 * Ejecuta la simulacion un numero determinado de pasos
 	 * @param n Numero de pasos a ejecutar en la simulacion

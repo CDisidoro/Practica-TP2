@@ -1,28 +1,29 @@
 package simulator.view;
 
-import java.util.List;
-
-import javax.swing.SwingUtilities;
 import javax.swing.table.AbstractTableModel;
-
+import org.json.JSONArray;
 import org.json.JSONObject;
-
 import simulator.control.Controller;
-import simulator.model.Body;
-import simulator.model.SimulatorObserver;
 
 @SuppressWarnings("serial")
-public class ParametersTableModel extends AbstractTableModel implements SimulatorObserver{
+public class ParametersTableModel extends AbstractTableModel{
 	private String[] column = {"Key", "Value", "Description"};
 	private String comboItem;
+	private String[] keys = new String[2];
 	private Controller ctrl;
-	private JSONObject data;
+	private JSONObject data, lawReturn = new JSONObject();
 	private int currentLaw;
+	/**
+	 * Inicializa el modelo de la tabla de parametros del cuadro de dialogo
+	 * @param ctrl Controlador del simulador fisico
+	 * @param comboBoxItem Ley fisica seleccionada en el JComboBox del cuadro de dialogo
+	 */
 	ParametersTableModel(Controller ctrl, String comboBoxItem){
 		comboItem = comboBoxItem;
 		this.ctrl = ctrl;
+		keys[0] = "";
+		keys[1] = "";
 		searchForceLaw();
-		ctrl.addObserver(this);
 	}
 	//METODOS DE ABSTRACTTABLEMODEL
 	@Override
@@ -34,6 +35,10 @@ public class ParametersTableModel extends AbstractTableModel implements Simulato
 		return column.length;
 	}
 	@Override
+	public void setValueAt(Object aValue, int rowIndex, int columnIndex) {
+		keys[rowIndex] = aValue.toString();
+	}
+	@Override
 	public Object getValueAt(int rowIndex, int columnIndex) {
 		String o = null;
 		switch(columnIndex) {
@@ -43,6 +48,7 @@ public class ParametersTableModel extends AbstractTableModel implements Simulato
 			}
 			break;
 		case 1:
+			o = keys[rowIndex];
 			break;
 		case 2:
 			if(currentLaw == 0) {
@@ -70,43 +76,20 @@ public class ParametersTableModel extends AbstractTableModel implements Simulato
 			return false;
 		}
 	}
-	//METODOS DE OBSERVER
-	@Override
-	public void onRegister(List<Body> bodies, double time, double dt, String fLawsDesc) {
-		update(fLawsDesc);
-	}
-	@Override
-	public void onReset(List<Body> bodies, double time, double dt, String fLawsDesc) {
-		update(fLawsDesc);
-	}
-	@Override
-	public void onBodyAdded(List<Body> bodies, Body b) {
-	}
-	@Override
-	public void onAdvance(List<Body> bodies, double time) {
-	}
-	@Override
-	public void onDeltaTimeChanged(double dt) {
-	}
-	@Override
-	public void onForceLawsChanged(String fLawsDesc) {
-		update(fLawsDesc);
-	}
-	//METODOS PERSONALES
-	private void update(String fLawDesc) {
-		SwingUtilities.invokeLater(new Runnable() {
-			@Override
-			public void run() {
-				
-				fireTableStructureChanged();
-			}
-		});
-	}
+	/**
+	 * Resetea los datos dentro de la tabla cuando se cambia la ley elegida en el comboBox
+	 * @param comboBoxItem Nueva ley fisica elegida en el comboBox
+	 */
 	protected void refresh(String comboBoxItem) {
 		comboItem = comboBoxItem;
+		keys[0] = "";
+		keys[1] = "";
 		searchForceLaw();
 		fireTableStructureChanged();
 	}
+	/**
+	 * Busca la ley de fuerza seleccionada por el comboBox, que sea coincidente con alguna de las leyes fisicas del simulador
+	 */
 	private void searchForceLaw() {
 		boolean found = false;
 		int i = 0;
@@ -119,9 +102,37 @@ public class ParametersTableModel extends AbstractTableModel implements Simulato
 			i++;
 		}
 	}
+	/**
+	 * Crea el objeto JSON de retorno para el controlador del simulador, para modificar su ley fisica
+	 * @return Un objeto JSON que contiene toda la informacion de la nueva ley fisica a cargar
+	 */
 	protected JSONObject getLaw() {
 		JSONObject law = new JSONObject();
-		
-		return law;
+		JSONArray coords = new JSONArray();
+		lawReturn.put("type", ctrl.getForceLawsInfo().get(currentLaw).getString("type"));
+		try {
+			for(int i=0; i < data.names().length() ;i++) {
+				if(data.names().getString(i).equals("c")) {
+					try {
+						coords.put(Double.parseDouble(keys[i].split(",")[0]));
+						coords.put(Double.parseDouble(keys[i].split(",")[1]));
+					}catch(Exception e) {
+						System.out.println("Error cargando las coordenadas para Punto Fijo");
+					}
+					law.put(data.names().getString(i), coords);
+				}else {
+					try {
+						law.put(data.names().getString(i), Double.parseDouble(keys[i]));
+					}catch(Exception e) {
+						System.out.println("Error creando el JSONObject de la Ley de fuerza");
+					}
+				}
+			}
+		}catch(Exception e) {
+			System.out.println("Se ha elegido ley Sin Fuerza");
+		}
+		lawReturn.put("data", law);
+		System.out.println(lawReturn.toString());
+		return lawReturn;
 	}
 }

@@ -85,6 +85,10 @@ public class BodiesTableModel extends AbstractTableModel implements SimulatorObs
 	public void onForceLawsChanged(String fLawsDesc) {
 	}
 	//Metodos Personales
+	/**
+	 * Actualiza la simulacion con la lista nueva de cuerpos
+	 * @param bod Lista nueva de cuerpos para el simulador
+	 */
 	private void update(List<Body> bod) {
 		SwingUtilities.invokeLater(new Runnable() {
 			@Override

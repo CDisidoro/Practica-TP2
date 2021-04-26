@@ -132,7 +132,7 @@ public class Viewer extends JComponent implements SimulatorObserver{
 			bod = iterBod.next();
 			Vector2D vector = bod.getPosition();
 			gr.setColor(azul);
-			gr.fillOval(_centerX + (int) (vector.getX()/_scale), _centerY - (int) (vector.getY()/_scale), 5, 5);
+			gr.fillOval(_centerX + (int) (vector.getX()/_scale), _centerY - (int) (vector.getY()/_scale), 10, 10);
 			if(_showVectors) {
 				drawLineWithArrow(gr,
 								_centerX + (int) (vector.getX()/_scale) + 5,
