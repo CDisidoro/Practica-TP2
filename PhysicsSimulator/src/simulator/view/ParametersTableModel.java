@@ -4,7 +4,11 @@ import javax.swing.table.AbstractTableModel;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import simulator.control.Controller;
-
+/**
+ * Modelo de la Tabla que contiene la informacion de las leyes fisicas disponibles
+ * @author Camilo Andres D'isidoro y Jose Ignacio Barrios Oros
+ *
+ */
 @SuppressWarnings("serial")
 public class ParametersTableModel extends AbstractTableModel{
 	private String[] column = {"Key", "Value", "Description"};

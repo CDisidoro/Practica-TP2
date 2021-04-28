@@ -19,7 +19,7 @@ public class Vector2D {
 
 	/**
 	 * Constructor que copia otro vector
-	 * @param v
+	 * @param v Vector original que se desea copiar
 	 */
 	public Vector2D(Vector2D v) {
 		_x = v._x;

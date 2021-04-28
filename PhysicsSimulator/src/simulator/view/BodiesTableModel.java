@@ -10,11 +10,11 @@ import simulator.control.Controller;
 import simulator.model.Body;
 import simulator.model.SimulatorObserver;
 
-@SuppressWarnings("serial")
 /**
  * Modelo de la tabla de estado de los cuerpos del simulador
  * @author Camilo Andres D'isidoro y Jose Ignacio Barrios Oros
  */
+@SuppressWarnings("serial")
 public class BodiesTableModel extends AbstractTableModel implements SimulatorObserver{
 	private List<Body> _bodies;
 	private String [] columnas = {"ID", "Mass", "Position", "Velocity", "Force"};

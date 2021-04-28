@@ -11,13 +11,13 @@ import javax.swing.JTable;
 import javax.swing.border.TitledBorder;
 import simulator.control.Controller;
 
-@SuppressWarnings("serial")
 /**
  * Tabla de estado de los cuerpos del simulador
  * @author Camilo Andres D'isidoro y Jose Ignacio Barrios Oros
  * @see JPanel
  * @see BodiesTableModel
  */
+@SuppressWarnings("serial")
 public class BodiesTable extends JPanel{
 	/**
 	 * Constructor de la tabla de estado de los cuerpos

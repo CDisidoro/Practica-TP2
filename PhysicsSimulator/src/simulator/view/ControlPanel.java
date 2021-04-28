@@ -26,12 +26,12 @@ import simulator.control.Controller;
 import simulator.model.Body;
 import simulator.model.SimulatorObserver;
 
-@SuppressWarnings("serial")
 /**
  * Panel de Control del Simulador Fisico, donde estan los botones esenciales para su funcionamiento
  * @author Camilo Andres D'isidoro y Jose Ignacio Barrios Oros
  * @see JPanel
  */
+@SuppressWarnings("serial")
 public class ControlPanel extends JPanel implements SimulatorObserver{
 
 	private Controller _ctrl;
@@ -47,6 +47,7 @@ public class ControlPanel extends JPanel implements SimulatorObserver{
 	/**
 	 * Constructor del Panel de control que llama a initGUI y añade al controlador como un observador
 	 * @param ctrl Controlador del Simulador Fisico
+	 * @param mainWindow Ventana principal del Simulador
 	 */
 	public ControlPanel(Controller ctrl, MainWindow mainWindow) {
 		_ctrl = ctrl;

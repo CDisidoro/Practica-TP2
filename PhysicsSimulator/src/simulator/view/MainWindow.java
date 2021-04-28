@@ -7,12 +7,12 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import simulator.control.Controller;
 
-@SuppressWarnings("serial")
 /**
  * Ventana Principal del GUI Simulador Fisico
  * @author Camilo Andres D'isidoro y Jose Ignacio Barrios Oros
  * @see JFrame
  */
+@SuppressWarnings("serial")
 public class MainWindow extends JFrame{
 	protected Controller ctrl;
 	/**

@@ -11,7 +11,11 @@ import javax.swing.JTable;
 import org.json.JSONObject;
 
 import simulator.control.Controller;
-
+/**
+ * Tabla de parametros de la ley fisica a modificar en el simulador fisico
+ * @author Camilo Andres D'isidoro y Jose Ignacio Barrios Oros
+ *
+ */
 @SuppressWarnings("serial")
 public class ParametersTable extends JPanel{
 	private ParametersTableModel modelo;

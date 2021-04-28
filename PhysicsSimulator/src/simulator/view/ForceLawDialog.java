@@ -16,7 +16,11 @@ import javax.swing.JPanel;
 import org.json.JSONObject;
 
 import simulator.control.Controller;
-
+/**
+ * Cuadro de dialogo del cambio de la ley de fuerza
+ * @author Camilo Andres D'isidoro y Jose Ignacio Barrios Oros
+ *
+ */
 @SuppressWarnings("serial")
 public class ForceLawDialog extends JDialog{
 	private int _status;

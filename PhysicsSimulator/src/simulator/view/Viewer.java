@@ -22,7 +22,11 @@ import simulator.control.Controller;
 import simulator.misc.Vector2D;
 import simulator.model.Body;
 import simulator.model.SimulatorObserver;
-
+/**
+ * Visualizador de los cuerpos dentro del simulador Fisico
+ * @author Camilo Andres D'isidoro y Jose Ignacio Barrios Oros
+ *
+ */
 @SuppressWarnings("serial")
 public class Viewer extends JComponent implements SimulatorObserver{
 	private static final int _WIDHT = 800;
@@ -30,19 +34,25 @@ public class Viewer extends JComponent implements SimulatorObserver{
 	private Color azul = Color.cyan;
 	private Color rojo = Color.red;
 	private Color negro = Color.black;
+	private Color verde = Color.green;
 	private int _centerX;
 	private int _centerY;
 	private double _scale;
 	private List<Body> _bodies;
 	private boolean _showHelp;
 	private boolean _showVectors;
-	
+	/**
+	 * Constructor del visualizador de cuerpos
+	 * @param ctrl Controlador del simulador, para agregar el viewer como un Observador
+	 */
 	Viewer(Controller ctrl){
 		initGUI();
 		ctrl.addObserver(this);
 	}
 	
-	
+	/**
+	 * Inicializacion de la interfaz grafica del Visualizador
+	 */
 	private void initGUI() {
 		this.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(negro, 2),
 						"Viewer",
@@ -130,19 +140,39 @@ public class Viewer extends JComponent implements SimulatorObserver{
 		Body bod;
 		while(iterBod.hasNext()) {
 			bod = iterBod.next();
-			Vector2D vector = bod.getPosition();
+			Vector2D vector = bod.getPosition(), velocidad = bod.getVelocity().direction().scale(20), fuerza = bod.getForce().direction().scale(20);
+			int posX = _centerX + (int) (vector.getX()/_scale) + 5;
+			int posY = _centerY - (int) (vector.getY()/_scale) + 5;
+			//Dibuja el circulo
 			gr.setColor(azul);
 			gr.fillOval(_centerX + (int) (vector.getX()/_scale), _centerY - (int) (vector.getY()/_scale), 10, 10);
+			//Dibuja el nombre del cuerpo
+			gr.setColor(negro);
+			gr.drawString(bod.getId(),
+					_centerX + (int) (vector.getX()/_scale) + 15,
+					_centerY - (int) (vector.getY()/_scale) + 15);
 			if(_showVectors) {
+				//Dibujar los vectores velocidad (verde) y fuerza (rojo)
+				//Dibuja la fuerza
 				drawLineWithArrow(gr,
-								_centerX + (int) (vector.getX()/_scale) + 5,
-								_centerY - (int) (vector.getY()/_scale) + 5,
-								_centerX + (int) (vector.getX()/_scale) + 15,
-								_centerY - (int) (vector.getY()/_scale) + 15,
+								posX,
+								posY,
+								posX + (int) fuerza.getX(),
+								posY + (int) fuerza.getY(),
 								3,
 								6,
 								rojo,
 								rojo);
+				//Dibuja la velocidad
+				drawLineWithArrow(gr,
+								posX,
+								posY,
+								posX + (int) velocidad.getX(),
+								posY - (int) velocidad.getY(),
+								3,
+								6,
+								verde,
+								verde);
 			}
 		}
 		//Dibuja help (Si showHelp es true)
