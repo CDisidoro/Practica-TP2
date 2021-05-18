@@ -38,11 +38,12 @@ public class ControlPanel extends JPanel implements SimulatorObserver{
 	private boolean _stopped;
 	private JToolBar tools;
 	private JButton chooseFileButton,chooseForceButton,startButton,stopButton,exitButton;
-	private JSpinner stepsSpinner;
+	private JSpinner stepsSpinner, delaySpinner;
 	private JFileChooser fileChooser;
 	private JTextField deltaTimeField;
 	private ForceLawDialog forceDialog;
 	private MainWindow mainWindow;
+	private volatile Thread simThread;
 	String archivo;
 	/**
 	 * Constructor del Panel de control que llama a initGUI y añade al controlador como un observador
@@ -105,13 +106,25 @@ public class ControlPanel extends JPanel implements SimulatorObserver{
 		startButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				setStatus(false);
-				try {
-					_ctrl.setDeltaTime(Double.parseDouble(deltaTimeField.getText()));
-				}catch(Exception ex) {
-					JOptionPane.showMessageDialog(null, "Error en el parseo de Delta Time","ERROR",JOptionPane.ERROR_MESSAGE);
+				if(simThread == null) {
+					setStatus(false);
+					try {
+						_ctrl.setDeltaTime(Double.parseDouble(deltaTimeField.getText()));
+					}catch(Exception ex) {
+						JOptionPane.showMessageDialog(null, "Error en el parseo de Delta Time","ERROR",JOptionPane.ERROR_MESSAGE);
+					}
+					//Inicializacion del Hilo
+					simThread = new Thread(new Runnable() {
+						@Override
+						public void run() {
+							run_sim(Integer.parseInt(stepsSpinner.getValue().toString()), Long.parseLong(delaySpinner.getValue().toString()));
+							setStatus(true);
+							simThread = null;
+						}
+					});
+					//Ejecucion del hilo
+					simThread.start();
 				}
-				run_sim(Integer.parseInt(stepsSpinner.getValue().toString()));
 			}
 		});
 		//Configuracion del Boton de Parar
@@ -121,7 +134,9 @@ public class ControlPanel extends JPanel implements SimulatorObserver{
 		stopButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				setStatus(true);
+				if(simThread != null) {
+					simThread.interrupt();
+				}
 			}
 		});
 		//Configuracion del Boton de Salir
@@ -146,6 +161,10 @@ public class ControlPanel extends JPanel implements SimulatorObserver{
 		deltaTimeField = new JTextField();
 		deltaTimeField.setPreferredSize(new Dimension(80, 40));
 		deltaTimeField.setMaximumSize(new Dimension(80, 40));
+		//Configuracion del Spinner de Delay - PRACTICA 3
+		delaySpinner = new JSpinner(new SpinnerNumberModel(1 , 0, 1000, 1));
+		delaySpinner.setPreferredSize(new Dimension(80, 40));
+		delaySpinner.setMaximumSize(new Dimension(80, 40));
 		//Agregado de los Componentes
 		tools.add(chooseFileButton);
 		tools.addSeparator();
@@ -153,6 +172,8 @@ public class ControlPanel extends JPanel implements SimulatorObserver{
 		tools.addSeparator();
 		tools.add(startButton);
 		tools.add(stopButton);
+		tools.add(new JLabel("Delay: "));
+		tools.add(delaySpinner);
 		tools.add(new JLabel("Steps: "));
 		tools.add(stepsSpinner);
 		tools.addSeparator();
@@ -206,6 +227,35 @@ public class ControlPanel extends JPanel implements SimulatorObserver{
 		}
 	}
 	/**
+	 * Ejecuta la simulacion un numero determinado de pasos
+	 * @param n Numero de pasos a ejecutar en la simulacion
+	 * @param delay Tiempo de retardo entre cada paso de simulacion
+	 */
+	private void run_sim(int n, long delay) {
+		while (n > 0 && !Thread.interrupted()) {
+			try {
+				_ctrl.run(1);
+			}catch(Exception e) {
+				SwingUtilities.invokeLater(new Runnable() {
+					@Override
+					public void run() {
+						JPanel error=new JPanel();
+						JOptionPane.showMessageDialog(error, "Error en la simulacion","ERROR",JOptionPane.ERROR_MESSAGE);
+						setStatus(true);
+						return;
+					}
+				});
+			}
+			try {
+				Thread.sleep(delay);
+			}catch(InterruptedException ex) {
+				Thread.currentThread().interrupt();
+			}
+			n--;
+		}
+		setStatus(true);
+	}
+	/**
 	 * Carga una imagen en un boton
 	 * @param path Ruta de la imagen que tendra el boton
 	 * @return Un nuevo objeto ImageIcon con la ruta de path
@@ -224,6 +274,7 @@ public class ControlPanel extends JPanel implements SimulatorObserver{
 		startButton.setEnabled(status);
 		exitButton.setEnabled(status);
 		stepsSpinner.setEnabled(status);
+		delaySpinner.setEnabled(status);
 		deltaTimeField.setEditable(status);
 	}
 	/**
